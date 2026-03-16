@@ -1,0 +1,2291 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Neo | Cross-Border E-Commerce × Data × Finance × AI</title>
+<meta name="description" content="Neo - 跨境电商实战派 | 数据分析 × 财务思维 × AI 提效">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Outfit:wght@300;400;500;600&family=Noto+Sans+SC:wght@300;400;500;600;700&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════
+   CSS VARIABLES & THEME SYSTEM
+   ═══════════════════════════════════════════ */
+:root {
+  /* Brand Colors */
+  --gold: #C8A265;
+  --gold-light: #D4B478;
+  --gold-dark: #A8864F;
+  
+  /* Spacing */
+  --section-pad: clamp(80px, 10vw, 140px);
+  --container: min(1200px, 90vw);
+  --gap: clamp(16px, 2vw, 32px);
+  
+  /* Typography */
+  --font-display: 'Syne', 'Noto Sans SC', sans-serif;
+  --font-body: 'Outfit', 'Noto Sans SC', sans-serif;
+  --font-accent: 'Crimson Pro', 'Noto Sans SC', serif;
+  
+  /* Transitions */
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration: 0.6s;
+}
+
+/* Dark Theme (Default) */
+[data-theme="dark"] {
+  --bg-primary: #080C14;
+  --bg-secondary: #0D1320;
+  --bg-card: #111827;
+  --bg-card-hover: #1A2332;
+  --bg-elevated: #162032;
+  --border: rgba(200, 162, 101, 0.12);
+  --border-hover: rgba(200, 162, 101, 0.25);
+  --text-primary: #E8E6E1;
+  --text-secondary: #9CA3AF;
+  --text-muted: #6B7280;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+  --shadow-lg: 0 12px 48px rgba(0,0,0,0.5);
+  --glow: 0 0 40px rgba(200, 162, 101, 0.06);
+  --gradient-hero: radial-gradient(ellipse at 30% 20%, rgba(200,162,101,0.04) 0%, transparent 60%),
+                   radial-gradient(ellipse at 70% 80%, rgba(30,58,95,0.15) 0%, transparent 50%);
+  --nav-bg: rgba(8, 12, 20, 0.85);
+  --code-bg: #0D1320;
+}
+
+/* Light Theme */
+[data-theme="light"] {
+  --bg-primary: #FAFAF7;
+  --bg-secondary: #F2F0EB;
+  --bg-card: #FFFFFF;
+  --bg-card-hover: #F8F7F4;
+  --bg-elevated: #FFFFFF;
+  --border: rgba(0, 0, 0, 0.08);
+  --border-hover: rgba(200, 162, 101, 0.35);
+  --text-primary: #1A1A18;
+  --text-secondary: #5A5A55;
+  --text-muted: #8A8A85;
+  --shadow: 0 4px 24px rgba(0,0,0,0.06);
+  --shadow-lg: 0 12px 48px rgba(0,0,0,0.08);
+  --glow: 0 0 40px rgba(200, 162, 101, 0.08);
+  --gradient-hero: radial-gradient(ellipse at 30% 20%, rgba(200,162,101,0.06) 0%, transparent 60%),
+                   radial-gradient(ellipse at 70% 80%, rgba(30,58,95,0.04) 0%, transparent 50%);
+  --nav-bg: rgba(250, 250, 247, 0.88);
+  --code-bg: #F2F0EB;
+}
+
+/* ═══════════════════════════════════════════
+   RESET & BASE
+   ═══════════════════════════════════════════ */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.7;
+  font-weight: 400;
+  transition: background var(--duration) var(--ease), color var(--duration) var(--ease);
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--gold);
+  color: #080C14;
+}
+
+a { color: var(--gold); text-decoration: none; transition: all 0.3s var(--ease); }
+a:hover { color: var(--gold-light); }
+
+img { max-width: 100%; display: block; }
+
+/* ═══════════════════════════════════════════
+   TYPOGRAPHY
+   ═══════════════════════════════════════════ */
+h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; line-height: 1.2; }
+h1 { font-size: clamp(2.5rem, 6vw, 4.5rem); letter-spacing: -0.02em; }
+h2 { font-size: clamp(1.8rem, 3.5vw, 2.8rem); letter-spacing: -0.01em; }
+h3 { font-size: clamp(1.2rem, 2vw, 1.5rem); }
+h4 { font-size: 1.1rem; }
+
+.section-label {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--gold);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.section-label::before {
+  content: '';
+  width: 24px;
+  height: 1px;
+  background: var(--gold);
+}
+
+.section-title {
+  margin-bottom: 20px;
+}
+
+.section-desc {
+  color: var(--text-secondary);
+  font-size: 1.05rem;
+  max-width: 640px;
+  line-height: 1.8;
+}
+
+.accent-text {
+  font-family: var(--font-accent);
+  font-style: italic;
+  color: var(--gold);
+}
+
+/* ═══════════════════════════════════════════
+   LAYOUT
+   ═══════════════════════════════════════════ */
+.container {
+  width: var(--container);
+  margin: 0 auto;
+}
+
+section {
+  padding: var(--section-pad) 0;
+  position: relative;
+}
+
+.section-divider {
+  width: 48px;
+  height: 1px;
+  background: var(--gold);
+  opacity: 0.4;
+  margin: 0 auto;
+}
+
+/* ═══════════════════════════════════════════
+   NAVIGATION
+   ═══════════════════════════════════════════ */
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  padding: 0 5vw;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--nav-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  transition: all var(--duration) var(--ease);
+}
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+}
+
+.nav-logo svg { height: 32px; width: auto; }
+
+.nav-logo span {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.15rem;
+  letter-spacing: 0.08em;
+  color: var(--text-primary);
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  list-style: none;
+}
+
+.nav-links a {
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  letter-spacing: 0.04em;
+  transition: color 0.3s;
+  position: relative;
+}
+
+.nav-links a:hover,
+.nav-links a.active { color: var(--gold); }
+
+.nav-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nav-btn {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.82rem;
+  font-weight: 600;
+  font-family: var(--font-body);
+  transition: all 0.3s;
+}
+
+.nav-btn:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+  background: rgba(200, 162, 101, 0.05);
+}
+
+.mobile-menu-btn {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  font-size: 1.4rem;
+  cursor: pointer;
+  padding: 8px;
+}
+
+/* ═══════════════════════════════════════════
+   HERO
+   ═══════════════════════════════════════════ */
+#hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  background: var(--gradient-hero);
+  position: relative;
+  overflow: hidden;
+}
+
+#hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: -10%;
+  width: 50%;
+  height: 100%;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0L60 30L30 60L0 30Z' fill='none' stroke='rgba(200,162,101,0.03)' stroke-width='0.5'/%3E%3C/svg%3E") repeat;
+  opacity: 0.6;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  padding-top: 72px;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-bottom: 32px;
+  background: var(--bg-card);
+}
+
+.hero-badge .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--gold);
+  animation: pulse 2s ease infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.hero-name {
+  font-size: clamp(4rem, 10vw, 8rem);
+  font-family: var(--font-display);
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+  margin-bottom: 24px;
+  background: linear-gradient(135deg, var(--text-primary) 0%, var(--gold) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-tagline {
+  font-size: clamp(1.1rem, 2.2vw, 1.6rem);
+  font-weight: 400;
+  color: var(--text-secondary);
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+
+.hero-tagline strong {
+  color: var(--gold);
+  font-weight: 600;
+}
+
+.hero-desc {
+  font-size: 1rem;
+  color: var(--text-muted);
+  max-width: 560px;
+  line-height: 1.8;
+  margin-bottom: 40px;
+}
+
+.hero-ctas {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 28px;
+  border-radius: 8px;
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s var(--ease);
+  border: none;
+  letter-spacing: 0.02em;
+}
+
+.btn-primary {
+  background: var(--gold);
+  color: #080C14;
+}
+
+.btn-primary:hover {
+  background: var(--gold-light);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(200, 162, 101, 0.25);
+  color: #080C14;
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+}
+
+.btn-outline:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+  transform: translateY(-2px);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-secondary);
+  padding: 14px 16px;
+}
+
+.btn-ghost:hover { color: var(--gold); }
+
+.hero-metrics {
+  display: flex;
+  gap: 48px;
+  margin-top: 60px;
+  padding-top: 40px;
+  border-top: 1px solid var(--border);
+}
+
+.hero-metric .num {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--gold);
+  line-height: 1;
+}
+
+.hero-metric .label {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+  letter-spacing: 0.02em;
+}
+
+/* ═══════════════════════════════════════════
+   ABOUT
+   ═══════════════════════════════════════════ */
+#about .about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: start;
+}
+
+.about-text p {
+  color: var(--text-secondary);
+  margin-bottom: 20px;
+  font-size: 1.02rem;
+  line-height: 1.85;
+}
+
+.about-text p strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.about-traits {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 32px;
+}
+
+.trait-card {
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--bg-card);
+  transition: all 0.3s var(--ease);
+}
+
+.trait-card:hover {
+  border-color: var(--border-hover);
+  background: var(--bg-card-hover);
+  box-shadow: var(--glow);
+}
+
+.trait-card .icon {
+  font-size: 1.4rem;
+  margin-bottom: 10px;
+}
+
+.trait-card h4 {
+  font-size: 0.92rem;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.trait-card p {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+/* ═══════════════════════════════════════════
+   BADMINTON
+   ═══════════════════════════════════════════ */
+#badminton {
+  background: var(--bg-secondary);
+}
+
+.badminton-header {
+  text-align: center;
+  max-width: 640px;
+  margin: 0 auto 48px;
+}
+
+.badminton-header .section-label { justify-content: center; }
+.badminton-header .section-label::before { display: none; }
+
+.badminton-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.badminton-card {
+  padding: 32px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--bg-card);
+  text-align: center;
+  transition: all 0.3s var(--ease);
+}
+
+.badminton-card:hover {
+  border-color: var(--border-hover);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow);
+}
+
+.badminton-card .b-icon {
+  width: 48px;
+  height: 48px;
+  margin: 0 auto 16px;
+  border-radius: 12px;
+  background: rgba(200, 162, 101, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+}
+
+.badminton-card h3 {
+  font-size: 1.05rem;
+  margin-bottom: 8px;
+}
+
+.badminton-card p {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+.badminton-quote {
+  text-align: center;
+  margin-top: 48px;
+  padding: 32px;
+  border-left: 2px solid var(--gold);
+  border-right: 2px solid var(--gold);
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.badminton-quote p {
+  font-family: var(--font-accent);
+  font-size: 1.15rem;
+  font-style: italic;
+  color: var(--text-secondary);
+  line-height: 1.8;
+}
+
+/* ═══════════════════════════════════════════
+   SKILLS
+   ═══════════════════════════════════════════ */
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.skill-card {
+  padding: 32px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--bg-card);
+  transition: all 0.3s var(--ease);
+  position: relative;
+  overflow: hidden;
+}
+
+.skill-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.skill-card:hover::before { opacity: 1; }
+
+.skill-card:hover {
+  border-color: var(--border-hover);
+  box-shadow: var(--glow);
+  transform: translateY(-2px);
+}
+
+.skill-num {
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: rgba(200, 162, 101, 0.1);
+  line-height: 1;
+  margin-bottom: 16px;
+}
+
+.skill-card h3 {
+  margin-bottom: 12px;
+  font-size: 1.08rem;
+}
+
+.skill-card p {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.75;
+}
+
+.skill-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 16px;
+}
+
+.skill-tag {
+  font-size: 0.72rem;
+  padding: 4px 10px;
+  border-radius: 100px;
+  background: rgba(200, 162, 101, 0.08);
+  color: var(--gold);
+  font-weight: 500;
+}
+
+/* ═══════════════════════════════════════════
+   PROJECTS
+   ═══════════════════════════════════════════ */
+#projects { background: var(--bg-secondary); }
+
+.project-card {
+  padding: 40px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--bg-card);
+  margin-bottom: 24px;
+  transition: all 0.3s var(--ease);
+}
+
+.project-card:hover {
+  border-color: var(--border-hover);
+  box-shadow: var(--glow);
+}
+
+.project-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+  gap: 24px;
+}
+
+.project-num {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--gold);
+  letter-spacing: 0.15em;
+  white-space: nowrap;
+}
+
+.project-card h3 {
+  font-size: 1.2rem;
+  margin-bottom: 4px;
+}
+
+.project-subtitle {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.project-body {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+.project-section h4 {
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--gold);
+  margin-bottom: 8px;
+}
+
+.project-section p {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.75;
+}
+
+.project-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+}
+
+/* ═══════════════════════════════════════════
+   METHODOLOGY
+   ═══════════════════════════════════════════ */
+.method-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  margin-top: 48px;
+}
+
+.method-card {
+  padding: 32px 24px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--bg-card);
+  text-align: center;
+  transition: all 0.3s var(--ease);
+  position: relative;
+}
+
+.method-card:hover {
+  border-color: var(--border-hover);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow);
+}
+
+.method-num {
+  font-family: var(--font-display);
+  font-size: 3rem;
+  font-weight: 800;
+  color: rgba(200, 162, 101, 0.08);
+  line-height: 1;
+  margin-bottom: 16px;
+}
+
+.method-card h3 {
+  font-size: 1rem;
+  margin-bottom: 12px;
+}
+
+.method-card p {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+/* ═══════════════════════════════════════════
+   INSIGHTS
+   ═══════════════════════════════════════════ */
+#insights { background: var(--bg-secondary); }
+
+.insights-categories {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin: 32px 0;
+}
+
+.cat-pill {
+  padding: 8px 20px;
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.3s;
+  background: var(--bg-card);
+}
+
+.cat-pill:hover, .cat-pill.active {
+  border-color: var(--gold);
+  color: var(--gold);
+  background: rgba(200, 162, 101, 0.05);
+}
+
+.insights-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.insight-card {
+  padding: 28px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--bg-card);
+  transition: all 0.3s var(--ease);
+}
+
+.insight-card:hover {
+  border-color: var(--border-hover);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.insight-card .i-cat {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--gold);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 12px;
+}
+
+.insight-card h3 {
+  font-size: 1.02rem;
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.insight-card p {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.insight-card .i-date {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+/* ═══════════════════════════════════════════
+   COURSES & SERVICES
+   ═══════════════════════════════════════════ */
+.cs-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 40px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 4px;
+  width: fit-content;
+  background: var(--bg-card);
+}
+
+.cs-tab {
+  padding: 10px 24px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.3s;
+  border: none;
+  background: transparent;
+  font-family: var(--font-body);
+}
+
+.cs-tab.active {
+  background: var(--gold);
+  color: #080C14;
+}
+
+.cs-tab:hover:not(.active) {
+  color: var(--text-primary);
+}
+
+.cs-panel { display: none; }
+.cs-panel.active { display: block; }
+
+.template-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+.template-card, .course-card, .consult-card {
+  padding: 32px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--bg-card);
+  transition: all 0.3s var(--ease);
+}
+
+.template-card:hover, .course-card:hover, .consult-card:hover {
+  border-color: var(--border-hover);
+  box-shadow: var(--glow);
+  transform: translateY(-2px);
+}
+
+.template-card h3, .course-card h3, .consult-card h3 {
+  font-size: 1.05rem;
+  margin-bottom: 8px;
+}
+
+.template-card .t-desc, .course-card .c-desc, .consult-card .co-desc {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin-bottom: 16px;
+}
+
+.t-audience, .c-audience {
+  font-size: 0.78rem;
+  color: var(--gold);
+  font-weight: 500;
+  margin-bottom: 12px;
+}
+
+.t-includes {
+  list-style: none;
+  margin-bottom: 20px;
+}
+
+.t-includes li {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  padding: 4px 0;
+  padding-left: 16px;
+  position: relative;
+}
+
+.t-includes li::before {
+  content: '—';
+  position: absolute;
+  left: 0;
+  color: var(--gold);
+}
+
+.course-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+.course-card .c-badge {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 100px;
+  margin-bottom: 16px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.c-badge.flagship { background: rgba(200,162,101,0.15); color: var(--gold); }
+.c-badge.advanced { background: rgba(59,130,246,0.12); color: #60A5FA; }
+.c-badge.lead-gen { background: rgba(34,197,94,0.12); color: #4ADE80; }
+
+.c-modules {
+  list-style: none;
+  margin: 16px 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+}
+
+.c-modules li {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  padding: 3px 0 3px 14px;
+  position: relative;
+}
+
+.c-modules li::before {
+  content: '›';
+  position: absolute;
+  left: 0;
+  color: var(--gold);
+  font-weight: 700;
+}
+
+.consult-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+/* ═══════════════════════════════════════════
+   SUPPORT
+   ═══════════════════════════════════════════ */
+#support { background: var(--bg-secondary); }
+
+.support-box {
+  max-width: 600px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.support-icon {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 24px;
+  border-radius: 16px;
+  background: rgba(200, 162, 101, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+}
+
+.support-box p {
+  color: var(--text-secondary);
+  margin-bottom: 32px;
+  line-height: 1.8;
+}
+
+.support-methods {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.support-method {
+  padding: 12px 24px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  background: var(--bg-card);
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.support-method:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+/* ═══════════════════════════════════════════
+   CONTACT
+   ═══════════════════════════════════════════ */
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: start;
+}
+
+.contact-info .ci-item {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+  align-items: flex-start;
+}
+
+.ci-item .ci-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: rgba(200, 162, 101, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 1rem;
+}
+
+.ci-item h4 { font-size: 0.9rem; margin-bottom: 2px; }
+.ci-item p { font-size: 0.85rem; color: var(--text-secondary); }
+
+.contact-form input,
+.contact-form textarea {
+  width: 100%;
+  padding: 14px 18px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg-card);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  margin-bottom: 16px;
+  transition: all 0.3s;
+  outline: none;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(200, 162, 101, 0.08);
+}
+
+.contact-form textarea { min-height: 120px; resize: vertical; }
+
+/* ═══════════════════════════════════════════
+   FOOTER
+   ═══════════════════════════════════════════ */
+footer {
+  padding: 48px 0;
+  border-top: 1px solid var(--border);
+  text-align: center;
+}
+
+.footer-brand {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.footer-tagline {
+  font-family: var(--font-accent);
+  font-style: italic;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 16px;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  margin-bottom: 16px;
+  list-style: none;
+}
+
+.footer-links a {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.footer-links a:hover { color: var(--gold); }
+
+.footer-copy {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+/* ═══════════════════════════════════════════
+   ANIMATIONS
+   ═══════════════════════════════════════════ */
+.fade-in {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: all 0.7s var(--ease);
+}
+
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.stagger > * {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: all 0.5s var(--ease);
+}
+
+.stagger.visible > *:nth-child(1) { transition-delay: 0.05s; opacity: 1; transform: translateY(0); }
+.stagger.visible > *:nth-child(2) { transition-delay: 0.1s; opacity: 1; transform: translateY(0); }
+.stagger.visible > *:nth-child(3) { transition-delay: 0.15s; opacity: 1; transform: translateY(0); }
+.stagger.visible > *:nth-child(4) { transition-delay: 0.2s; opacity: 1; transform: translateY(0); }
+.stagger.visible > *:nth-child(5) { transition-delay: 0.25s; opacity: 1; transform: translateY(0); }
+.stagger.visible > *:nth-child(6) { transition-delay: 0.3s; opacity: 1; transform: translateY(0); }
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════ */
+@media (max-width: 1024px) {
+  .skills-grid, .method-grid { grid-template-columns: repeat(2, 1fr); }
+  .insights-grid { grid-template-columns: repeat(2, 1fr); }
+  .consult-grid { grid-template-columns: 1fr 1fr; }
+  .project-body { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .mobile-menu-btn { display: block; }
+  
+  #about .about-grid { grid-template-columns: 1fr; gap: 32px; }
+  .badminton-cards { grid-template-columns: 1fr; }
+  .skills-grid { grid-template-columns: 1fr; }
+  .method-grid { grid-template-columns: 1fr; }
+  .insights-grid { grid-template-columns: 1fr; }
+  .template-grid { grid-template-columns: 1fr; }
+  .course-grid { grid-template-columns: 1fr; }
+  .consult-grid { grid-template-columns: 1fr; }
+  .contact-grid { grid-template-columns: 1fr; gap: 40px; }
+  .hero-metrics { gap: 24px; flex-wrap: wrap; }
+  .hero-ctas { flex-direction: column; }
+  .btn { justify-content: center; }
+  
+  .cs-tabs {
+    width: 100%;
+    overflow-x: auto;
+  }
+}
+
+/* Mobile Nav Overlay */
+.mobile-nav {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  background: var(--bg-primary);
+  padding: 100px 5vw 40px;
+}
+
+.mobile-nav.open { display: flex; flex-direction: column; gap: 24px; }
+
+.mobile-nav a {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  display: block;
+  padding: 8px 0;
+}
+
+.mobile-nav a:hover { color: var(--gold); }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════
+     NAVIGATION
+     ═══════════════════════════════════════════ -->
+<nav>
+  <div class="nav-logo" onclick="scrollToTop()">
+    <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M8 34V6L20 22L32 6V34" stroke="var(--gold)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M20 22L32 6" stroke="var(--gold)" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="M28 6C30 3 34 2 38 4" stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+      <path d="M32 8C34 5 37 4 40 5" stroke="var(--gold)" stroke-width="1" stroke-linecap="round" opacity="0.35"/>
+    </svg>
+    <span>NEO</span>
+  </div>
+  
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#about" data-cn="关于" data-en="About">About</a></li>
+    <li><a href="#skills" data-cn="能力" data-en="Skills">Skills</a></li>
+    <li><a href="#projects" data-cn="案例" data-en="Projects">Projects</a></li>
+    <li><a href="#methodology" data-cn="方法论" data-en="Philosophy">Philosophy</a></li>
+    <li><a href="#insights" data-cn="洞见" data-en="Insights">Insights</a></li>
+    <li><a href="#services" data-cn="课程与服务" data-en="Services">Services</a></li>
+    <li><a href="#contact" data-cn="联系" data-en="Contact">Contact</a></li>
+  </ul>
+
+  <div class="nav-controls">
+    <button class="nav-btn" id="langToggle" onclick="toggleLang()" title="Switch Language">EN</button>
+    <button class="nav-btn" id="themeToggle" onclick="toggleTheme()" title="Toggle Theme">☀</button>
+    <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
+  </div>
+</nav>
+
+<div class="mobile-nav" id="mobileNav">
+  <a href="#about" onclick="closeMobileMenu()" data-cn="关于" data-en="About">About</a>
+  <a href="#skills" onclick="closeMobileMenu()" data-cn="能力" data-en="Skills">Skills</a>
+  <a href="#projects" onclick="closeMobileMenu()" data-cn="案例" data-en="Projects">Projects</a>
+  <a href="#methodology" onclick="closeMobileMenu()" data-cn="方法论" data-en="Philosophy">Philosophy</a>
+  <a href="#insights" onclick="closeMobileMenu()" data-cn="洞见" data-en="Insights">Insights</a>
+  <a href="#services" onclick="closeMobileMenu()" data-cn="课程与服务" data-en="Services">Services</a>
+  <a href="#contact" onclick="closeMobileMenu()" data-cn="联系" data-en="Contact">Contact</a>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     HERO
+     ═══════════════════════════════════════════ -->
+<section id="hero">
+  <div class="container">
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="dot"></span>
+        <span data-cn="跨境电商 · 数据 · 财务思维 · AI 提效" data-en="Cross-Border E-Commerce · Data · Financial Thinking · AI Efficiency">Cross-Border E-Commerce · Data · Financial Thinking · AI Efficiency</span>
+      </div>
+      
+      <div class="hero-name">Neo</div>
+      
+      <div class="hero-tagline" data-cn="以<strong>经营视角</strong>做运营，以<strong>数据思维</strong>驱动决策，以<strong>AI 工具</strong>放大效率" data-en="Operating with a <strong>business mindset</strong>, driving decisions with <strong>data thinking</strong>, amplifying efficiency with <strong>AI tools</strong>">
+        Operating with a <strong>business mindset</strong>, driving decisions with <strong>data thinking</strong>, amplifying efficiency with <strong>AI tools</strong>
+      </div>
+      
+      <div class="hero-desc" data-cn="我不只是一个电商运营，我是那个能把运营执行、数据分析、财务测算、流程体系和 AI 提效整合在一起的人。不做空谈，只做能落地、能复盘、能持续迭代的事。" data-en="I'm not just an e-commerce operator. I'm the one who integrates execution, data analytics, financial modeling, process systems, and AI efficiency into a unified approach. No empty talk — only work that lands, gets reviewed, and keeps iterating.">
+        I'm not just an e-commerce operator. I'm the one who integrates execution, data analytics, financial modeling, process systems, and AI efficiency into a unified approach. No empty talk — only work that lands, gets reviewed, and keeps iterating.
+      </div>
+      
+      <div class="hero-ctas">
+        <a href="#projects" class="btn btn-primary" data-cn="查看项目案例 →" data-en="View Projects →">View Projects →</a>
+        <a href="#services" class="btn btn-outline" data-cn="课程与服务" data-en="Courses & Services">Courses & Services</a>
+        <a href="#about" class="btn btn-ghost" data-cn="了解更多" data-en="Learn More">Learn More</a>
+      </div>
+      
+      <div class="hero-metrics">
+        <div class="hero-metric">
+          <div class="num" data-cn="10+" data-en="10+">10+</div>
+          <div class="label" data-cn="年商业经验" data-en="Years in Business">Years in Business</div>
+        </div>
+        <div class="hero-metric">
+          <div class="num" data-cn="4" data-en="4">4</div>
+          <div class="label" data-cn="亚马逊站点运营" data-en="Amazon Marketplaces">Amazon Marketplaces</div>
+        </div>
+        <div class="hero-metric">
+          <div class="num" data-cn="3+" data-en="3+">3+</div>
+          <div class="label" data-cn="跨境电商平台" data-en="E-Commerce Platforms">E-Commerce Platforms</div>
+        </div>
+        <div class="hero-metric">
+          <div class="num" data-cn="∞" data-en="∞">∞</div>
+          <div class="label" data-cn="持续迭代的系统" data-en="Iterating Systems">Iterating Systems</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     ABOUT
+     ═══════════════════════════════════════════ -->
+<section id="about">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-text fade-in">
+        <div class="section-label" data-cn="关于我" data-en="About">About</div>
+        <h2 class="section-title" data-cn="不只是运营，更是经营" data-en="Not Just Operating — Running the Business">Not Just Operating — Running the Business</h2>
+        
+        <p data-cn="我是 Neo，一位长期深耕跨境电商领域的从业者。我的职业起点是财务与金融，十年的数字敏感度训练，让我养成了用经营视角审视一切的思维习惯。" data-en="I'm Neo, a cross-border e-commerce professional with deep operational experience. My career started in finance — ten years of building numerical sensitivity trained me to view everything through a business management lens.">
+          I'm Neo, a cross-border e-commerce professional with deep operational experience. My career started in finance — ten years of building numerical sensitivity trained me to view everything through a business management lens.
+        </p>
+        
+        <p data-cn="我目前管理 Amazon 美国、加拿大、英国、德国四站点运营，同时实践 TikTok Shop 和 Temu 等新渠道。我不追求表面数据的好看，而是追求每一个决策背后的利润逻辑和长期价值。" data-en="I currently manage Amazon operations across the US, Canada, UK, and Germany, while also practicing on emerging channels like TikTok Shop and Temu. I don't chase vanity metrics — I pursue the profit logic and long-term value behind every decision.">
+          I currently manage Amazon operations across the US, Canada, UK, and Germany, while also practicing on emerging channels like TikTok Shop and Temu. I don't chase vanity metrics — I pursue the profit logic and long-term value behind every decision.
+        </p>
+        
+        <p data-cn="我擅长的不是某一项技能，而是<strong>把运营、数据、财务、流程和 AI 工具串联成一个完整的经营系统</strong>。让每一个环节可量化、可复盘、可迭代。" data-en="My strength isn't any single skill — it's <strong>connecting operations, data, finance, process, and AI tools into a complete business system</strong>. Making every link quantifiable, reviewable, and iterable.">
+          My strength isn't any single skill — it's <strong>connecting operations, data, finance, process, and AI tools into a complete business system</strong>. Making every link quantifiable, reviewable, and iterable.
+        </p>
+      </div>
+      
+      <div class="about-traits stagger fade-in">
+        <div class="trait-card">
+          <div class="icon">📊</div>
+          <h4 data-cn="数据驱动" data-en="Data-Driven">Data-Driven</h4>
+          <p data-cn="用数据说话，不凭直觉拍板" data-en="Decisions backed by data, not gut feeling">Decisions backed by data, not gut feeling</p>
+        </div>
+        <div class="trait-card">
+          <div class="icon">💰</div>
+          <h4 data-cn="财务思维" data-en="Financial Thinking">Financial Thinking</h4>
+          <p data-cn="ROI、IRR、NPV 不是公式，是决策习惯" data-en="ROI, IRR, NPV — not formulas, but decision habits">ROI, IRR, NPV — not formulas, but decision habits</p>
+        </div>
+        <div class="trait-card">
+          <div class="icon">⚙️</div>
+          <h4 data-cn="体系搭建" data-en="System Builder">System Builder</h4>
+          <p data-cn="把经验变成 SOP，让流程可复用" data-en="Turning experience into SOPs, making processes reusable">Turning experience into SOPs, making processes reusable</p>
+        </div>
+        <div class="trait-card">
+          <div class="icon">🤖</div>
+          <h4 data-cn="AI 提效" data-en="AI-Powered">AI-Powered</h4>
+          <p data-cn="用 AI 放大个人产出，不做重复劳动" data-en="Amplifying output with AI, eliminating repetitive work">Amplifying output with AI, eliminating repetitive work</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ═══════════════════════════════════════════
+     BADMINTON
+     ═══════════════════════════════════════════ -->
+<section id="badminton">
+  <div class="container">
+    <div class="badminton-header fade-in">
+      <div class="section-label" data-cn="训练与长期主义" data-en="Discipline & Long-term Growth">Discipline & Long-term Growth</div>
+      <h2 class="section-title" data-cn="羽毛球：另一种训练哲学" data-en="Badminton: Another Training Philosophy">Badminton: Another Training Philosophy</h2>
+      <p class="section-desc" style="margin:0 auto" data-cn="场上的每一拍，都是判断、节奏和纪律的训练。羽毛球不只是运动，是我理解「刻意练习」和「长期主义」的方式。" data-en="Every stroke on the court is training in judgment, rhythm, and discipline. Badminton isn't just a sport — it's how I understand deliberate practice and the long game.">
+        Every stroke on the court is training in judgment, rhythm, and discipline. Badminton isn't just a sport — it's how I understand deliberate practice and the long game.
+      </p>
+    </div>
+    
+    <div class="badminton-cards stagger fade-in">
+      <div class="badminton-card">
+        <div class="b-icon">🏸</div>
+        <h3 data-cn="认证教练" data-en="Certified Coach">Certified Coach</h3>
+        <p data-cn="持有羽毛球教练员资格证。教学不只是传授技术，更是拆解复杂动作为可训练的结构化系统。" data-en="Certified badminton coach. Teaching isn't just about technique — it's breaking complex movements into trainable, structured systems.">
+          Certified badminton coach. Teaching isn't just about technique — it's breaking complex movements into trainable, structured systems.
+        </p>
+      </div>
+      
+      <div class="badminton-card">
+        <div class="b-icon">🔄</div>
+        <h3 data-cn="节奏与复盘" data-en="Rhythm & Review">Rhythm & Review</h3>
+        <p data-cn="比赛中的节奏把控和赛后复盘习惯，和数据分析与经营复盘的底层逻辑一脉相承。" data-en="The rhythm control during a match and post-game review mirror the same logic I apply to data analysis and business retrospectives.">
+          The rhythm control during a match and post-game review mirror the same logic I apply to data analysis and business retrospectives.
+        </p>
+      </div>
+      
+      <div class="badminton-card">
+        <div class="b-icon">📈</div>
+        <h3 data-cn="长期主义" data-en="Long-term Growth">Long-term Growth</h3>
+        <p data-cn="没有捷径，只有日复一日的刻意练习。这种态度，贯穿我的运动和职业生涯。" data-en="No shortcuts — only day-after-day deliberate practice. This attitude runs through both my sport and my career.">
+          No shortcuts — only day-after-day deliberate practice. This attitude runs through both my sport and my career.
+        </p>
+      </div>
+    </div>
+    
+    <div class="badminton-quote fade-in">
+      <p data-cn="球场上看到的是技术，球场下沉淀的是系统。" data-en="What you see on the court is technique. What's built off the court is a system.">
+        "What you see on the court is technique. What's built off the court is a system."
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     SKILLS
+     ═══════════════════════════════════════════ -->
+<section id="skills">
+  <div class="container">
+    <div class="fade-in">
+      <div class="section-label" data-cn="能力地图" data-en="Core Competencies">Core Competencies</div>
+      <h2 class="section-title" data-cn="六大核心能力板块" data-en="Six Core Competency Pillars">Six Core Competency Pillars</h2>
+      <p class="section-desc" data-cn="不是单一技能点，而是一个完整的跨境电商经营能力体系。" data-en="Not isolated skill points, but a complete cross-border e-commerce business capability system.">
+        Not isolated skill points, but a complete cross-border e-commerce business capability system.
+      </p>
+    </div>
+    
+    <div class="skills-grid stagger fade-in" style="margin-top:40px">
+      <div class="skill-card">
+        <div class="skill-num">01</div>
+        <h3 data-cn="跨境平台运营" data-en="Multi-Platform Operations">Multi-Platform Operations</h3>
+        <p data-cn="精通 Amazon 四站点（US/CA/UK/DE）全链路运营，实践 TikTok Shop 和 Temu 新渠道拓展，覆盖从选品上架、Listing 优化到广告投放、库存管理的完整闭环。" data-en="Expert in Amazon 4-marketplace full-cycle operations (US/CA/UK/DE), practicing TikTok Shop and Temu expansion. Covering the complete loop from product selection, listing optimization to advertising and inventory management.">
+          Expert in Amazon 4-marketplace full-cycle operations (US/CA/UK/DE), practicing TikTok Shop and Temu expansion. Covering the complete loop from product selection, listing optimization to advertising and inventory management.
+        </p>
+        <div class="skill-tags">
+          <span class="skill-tag">Amazon</span>
+          <span class="skill-tag">TikTok Shop</span>
+          <span class="skill-tag">Temu</span>
+          <span class="skill-tag">Listing</span>
+          <span class="skill-tag">PPC</span>
+        </div>
+      </div>
+      
+      <div class="skill-card">
+        <div class="skill-num">02</div>
+        <h3 data-cn="数据分析与经营复盘" data-en="Data Analysis & Business Review">Data Analysis & Business Review</h3>
+        <p data-cn="建立系统化的数据分析框架，从流量、转化、广告、库存到利润，用数据驱动每一步决策，而非凭经验和直觉判断。" data-en="Building systematic data analysis frameworks — from traffic, conversion, advertising, inventory to profit — driving every decision with data, not intuition.">
+          Building systematic data analysis frameworks — from traffic, conversion, advertising, inventory to profit — driving every decision with data, not intuition.
+        </p>
+        <div class="skill-tags">
+          <span class="skill-tag">Excel</span>
+          <span class="skill-tag">数据看板</span>
+          <span class="skill-tag">周报体系</span>
+          <span class="skill-tag">复盘机制</span>
+        </div>
+      </div>
+      
+      <div class="skill-card">
+        <div class="skill-num">03</div>
+        <h3 data-cn="财务思维赋能运营" data-en="Financial Thinking for Operations">Financial Thinking for Operations</h3>
+        <p data-cn="十年财务背景，让我能从 ROI、IRR、NPV 等维度评估每一个运营决策。不只看销售额，更看利润率、资金效率和长期回报。" data-en="A decade in finance enables me to evaluate every operational decision through ROI, IRR, and NPV. Looking beyond revenue to profit margins, capital efficiency, and long-term returns.">
+          A decade in finance enables me to evaluate every operational decision through ROI, IRR, and NPV. Looking beyond revenue to profit margins, capital efficiency, and long-term returns.
+        </p>
+        <div class="skill-tags">
+          <span class="skill-tag">ROI</span>
+          <span class="skill-tag">IRR</span>
+          <span class="skill-tag">NPV</span>
+          <span class="skill-tag">利润模型</span>
+          <span class="skill-tag">预算管理</span>
+        </div>
+      </div>
+      
+      <div class="skill-card">
+        <div class="skill-num">04</div>
+        <h3 data-cn="流程与体系搭建" data-en="Process & System Architecture">Process & System Architecture</h3>
+        <p data-cn="善于将个人经验和团队实践转化为可标准化、可复用的 SOP 和工作流程。让复杂业务变得可管理、可传承、可规模化。" data-en="Skilled at transforming personal experience and team practices into standardizable, reusable SOPs and workflows. Making complex operations manageable, transferable, and scalable.">
+          Skilled at transforming personal experience and team practices into standardizable, reusable SOPs and workflows. Making complex operations manageable, transferable, and scalable.
+        </p>
+        <div class="skill-tags">
+          <span class="skill-tag">SOP</span>
+          <span class="skill-tag">流程设计</span>
+          <span class="skill-tag">标准化</span>
+          <span class="skill-tag">可复用</span>
+        </div>
+      </div>
+      
+      <div class="skill-card">
+        <div class="skill-num">05</div>
+        <h3 data-cn="AI 与效率工具实践" data-en="AI & Efficiency Tools">AI & Efficiency Tools</h3>
+        <p data-cn="积极实践 ChatGPT、Claude、DeepSeek 等 AI 工具在运营分析、内容生成、数据处理和工作流自动化中的应用，追求用技术杠杆放大个人生产力。" data-en="Actively practicing ChatGPT, Claude, DeepSeek and other AI tools in operational analysis, content generation, data processing, and workflow automation — leveraging technology to amplify personal productivity.">
+          Actively practicing ChatGPT, Claude, DeepSeek and other AI tools in operational analysis, content generation, data processing, and workflow automation — leveraging technology to amplify personal productivity.
+        </p>
+        <div class="skill-tags">
+          <span class="skill-tag">ChatGPT</span>
+          <span class="skill-tag">Claude</span>
+          <span class="skill-tag">DeepSeek</span>
+          <span class="skill-tag">MCP</span>
+          <span class="skill-tag">自动化</span>
+        </div>
+      </div>
+      
+      <div class="skill-card">
+        <div class="skill-num">06</div>
+        <h3 data-cn="知识表达与课程输出" data-en="Knowledge Expression & Course Design">Knowledge Expression & Course Design</h3>
+        <p data-cn="善于将复杂的运营经验和方法论整理为结构化的内容，输出为可分享的文章、模板和课程。把知道变成说清楚，把做过变成教得会。" data-en="Skilled at organizing complex operational experience and methodologies into structured content — articles, templates, and courses. Turning 'knowing' into 'explaining clearly,' and 'having done' into 'teaching effectively.'">
+          Skilled at organizing complex operational experience and methodologies into structured content — articles, templates, and courses. Turning 'knowing' into 'explaining clearly,' and 'having done' into 'teaching effectively.'
+        </p>
+        <div class="skill-tags">
+          <span class="skill-tag">内容输出</span>
+          <span class="skill-tag">课程设计</span>
+          <span class="skill-tag">结构化写作</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     PROJECTS
+     ═══════════════════════════════════════════ -->
+<section id="projects">
+  <div class="container">
+    <div class="fade-in">
+      <div class="section-label" data-cn="项目案例" data-en="Case Studies">Case Studies</div>
+      <h2 class="section-title" data-cn="用方法论驱动的实战案例" data-en="Real-World Cases Driven by Methodology">Real-World Cases Driven by Methodology</h2>
+      <p class="section-desc" data-cn="不是经历的流水记录，而是每一次实战中方法论的提炼和经营能力的体现。" data-en="Not a log of experiences, but a distillation of methodology and business capability from each real engagement.">
+        Not a log of experiences, but a distillation of methodology and business capability from each real engagement.
+      </p>
+    </div>
+    
+    <div style="margin-top:40px">
+      <!-- Project 1 -->
+      <div class="project-card fade-in">
+        <div class="project-header">
+          <div>
+            <h3 data-cn="亚马逊多产品线清货与库存优化项目" data-en="Amazon Multi-Product Inventory Clearance & Optimization">Amazon Multi-Product Inventory Clearance & Optimization</h3>
+            <div class="project-subtitle" data-cn="库存管理 × 数据决策 × 成本控制" data-en="Inventory Management × Data-Driven Decisions × Cost Control">Inventory Management × Data-Driven Decisions × Cost Control</div>
+          </div>
+          <div class="project-num">CASE 01</div>
+        </div>
+        <div class="project-body">
+          <div class="project-section">
+            <h4 data-cn="背景与挑战" data-en="Background & Challenge">Background & Challenge</h4>
+            <p data-cn="接手多条产品线时，面临大量滞销库存积压，仓储费持续攀升，资金周转效率低下。部分 SKU 已接近长期仓储费触发周期，需要在限定时间内制定差异化清货策略。" data-en="Upon taking over multiple product lines, faced significant stagnant inventory buildup with rising storage fees and poor capital turnover. Several SKUs were approaching long-term storage fee thresholds, requiring differentiated clearance strategies within tight timelines.">
+              Upon taking over multiple product lines, faced significant stagnant inventory buildup with rising storage fees and poor capital turnover. Several SKUs were approaching long-term storage fee thresholds, requiring differentiated clearance strategies within tight timelines.
+            </p>
+          </div>
+          <div class="project-section">
+            <h4 data-cn="行动方案" data-en="Action Plan">Action Plan</h4>
+            <p data-cn="按 SKU 维度建立库存健康度评分体系，综合库龄、周转率、利润贡献率等指标进行分级处理。对不同层级产品分别制定促销清货、捆绑销售、移仓和移除方案，同步优化补货节奏。" data-en="Built an inventory health scoring system at SKU level, integrating metrics like inventory age, turnover rate, and profit contribution for tiered processing. Developed differentiated strategies — promotions, bundling, transfer, and removal — while optimizing replenishment rhythm.">
+              Built an inventory health scoring system at SKU level, integrating metrics like inventory age, turnover rate, and profit contribution for tiered processing. Developed differentiated strategies — promotions, bundling, transfer, and removal — while optimizing replenishment rhythm.
+            </p>
+          </div>
+          <div class="project-section">
+            <h4 data-cn="结果" data-en="Results">Results</h4>
+            <p data-cn="有效降低冗余库存占比，仓储成本显著改善，资金释放后重新投入高 ROI 产品线。建立了可复用的库存监控与预警机制，为后续运营提供了系统化的库存管理基础。" data-en="Significantly reduced excess inventory ratio, meaningfully improved storage costs, and reallocated freed capital to high-ROI product lines. Established a reusable inventory monitoring and alert mechanism as the systematic foundation for ongoing operations.">
+              Significantly reduced excess inventory ratio, meaningfully improved storage costs, and reallocated freed capital to high-ROI product lines. Established a reusable inventory monitoring and alert mechanism as the systematic foundation for ongoing operations.
+            </p>
+          </div>
+          <div class="project-section">
+            <h4 data-cn="核心价值" data-en="Core Value">Core Value</h4>
+            <p data-cn="这不只是一次清货行动，而是用数据建立了一套可持续运转的库存经营体系——从被动应对变为主动管理。" data-en="This wasn't just a clearance campaign — it was building a sustainable inventory management system through data, transforming from reactive firefighting to proactive control.">
+              This wasn't just a clearance campaign — it was building a sustainable inventory management system through data, transforming from reactive firefighting to proactive control.
+            </p>
+          </div>
+        </div>
+        <div class="project-tags">
+          <span class="skill-tag">Inventory</span>
+          <span class="skill-tag">Data Analysis</span>
+          <span class="skill-tag">Cost Optimization</span>
+          <span class="skill-tag">SOP</span>
+        </div>
+      </div>
+      
+      <!-- Project 2 -->
+      <div class="project-card fade-in">
+        <div class="project-header">
+          <div>
+            <h3 data-cn="广告结构重构与核心关键词推进项目" data-en="PPC Structure Rebuild & Core Keyword Strategy">PPC Structure Rebuild & Core Keyword Strategy</h3>
+            <div class="project-subtitle" data-cn="广告优化 × 结构化思维 × 数据复盘" data-en="Ad Optimization × Structural Thinking × Data Review">Ad Optimization × Structural Thinking × Data Review</div>
+          </div>
+          <div class="project-num">CASE 02</div>
+        </div>
+        <div class="project-body">
+          <div class="project-section">
+            <h4 data-cn="背景与挑战" data-en="Background & Challenge">Background & Challenge</h4>
+            <p data-cn="原有广告结构混乱，campaign 层级不清，关键词投放缺乏策略性，ACoS 居高不下，广告预算浪费严重，难以判断真正带来利润的流量来源。" data-en="Inherited a chaotic ad structure with unclear campaign hierarchy, non-strategic keyword targeting, persistently high ACoS, significant budget waste, and inability to identify truly profitable traffic sources.">
+              Inherited a chaotic ad structure with unclear campaign hierarchy, non-strategic keyword targeting, persistently high ACoS, significant budget waste, and inability to identify truly profitable traffic sources.
+            </p>
+          </div>
+          <div class="project-section">
+            <h4 data-cn="行动方案" data-en="Action Plan">Action Plan</h4>
+            <p data-cn="重新设计三层广告架构：品牌防御层、核心关键词攻坚层、长尾拓展层。对核心关键词建立独立追踪体系，每周复盘投产数据，逐步集中预算至高确定性词组，淘汰低效投放。" data-en="Redesigned a three-tier ad architecture: brand defense, core keyword offense, and long-tail expansion. Built independent tracking for core keywords with weekly performance reviews, progressively concentrating budget on high-certainty terms while eliminating underperformers.">
+              Redesigned a three-tier ad architecture: brand defense, core keyword offense, and long-tail expansion. Built independent tracking for core keywords with weekly performance reviews, progressively concentrating budget on high-certainty terms while eliminating underperformers.
+            </p>
+          </div>
+          <div class="project-section">
+            <h4 data-cn="结果" data-en="Results">Results</h4>
+            <p data-cn="广告投产效率显著提升，核心关键词自然排名得到有效推进，广告花费占比优化至合理区间。形成了一套可复用的广告结构搭建方法论和数据复盘流程。" data-en="Significantly improved ad efficiency, effectively pushed core keyword organic rankings, and optimized ad spend ratio to a healthy range. Developed a reusable ad structure methodology and data review process.">
+              Significantly improved ad efficiency, effectively pushed core keyword organic rankings, and optimized ad spend ratio to a healthy range. Developed a reusable ad structure methodology and data review process.
+            </p>
+          </div>
+          <div class="project-section">
+            <h4 data-cn="核心价值" data-en="Core Value">Core Value</h4>
+            <p data-cn="广告不是花钱的工具，而是用结构化策略和数据复盘驱动的增长引擎。" data-en="Advertising isn't a money-spending tool — it's a growth engine driven by structural strategy and data review.">
+              Advertising isn't a money-spending tool — it's a growth engine driven by structural strategy and data review.
+            </p>
+          </div>
+        </div>
+        <div class="project-tags">
+          <span class="skill-tag">PPC</span>
+          <span class="skill-tag">Keyword Strategy</span>
+          <span class="skill-tag">ACoS Optimization</span>
+          <span class="skill-tag">Data Review</span>
+        </div>
+      </div>
+      
+      <!-- Project 3 -->
+      <div class="project-card fade-in">
+        <div class="project-header">
+          <div>
+            <h3 data-cn="跨境电商数据分析体系搭建项目" data-en="Cross-Border E-Commerce Data Analytics System">Cross-Border E-Commerce Data Analytics System</h3>
+            <div class="project-subtitle" data-cn="数据体系 × 看板设计 × 决策赋能" data-en="Data Framework × Dashboard Design × Decision Enablement">Data Framework × Dashboard Design × Decision Enablement</div>
+          </div>
+          <div class="project-num">CASE 03</div>
+        </div>
+        <div class="project-body">
+          <div class="project-section">
+            <h4 data-cn="背景与挑战" data-en="Background & Challenge">Background & Challenge</h4>
+            <p data-cn="团队日常运营决策依赖感觉和碎片化数据，缺乏统一的数据口径和分析框架。运营数据散落在各个后台和表格中，无法快速形成可执行的经营判断。" data-en="Team relied on intuition and fragmented data for daily decisions, lacking unified data standards and analysis frameworks. Operational data was scattered across multiple backends and spreadsheets, unable to quickly form actionable business judgments.">
+              Team relied on intuition and fragmented data for daily decisions, lacking unified data standards and analysis frameworks. Operational data was scattered across multiple backends and spreadsheets, unable to quickly form actionable business judgments.
+            </p>
+          </div>
+          <div class="project-section">
+            <h4 data-cn="行动方案" data-en="Action Plan">Action Plan</h4>
+            <p data-cn="定义核心运营指标体系，搭建标准化的数据周报和经营复盘模板。建立从数据采集、清洗、分析到可视化呈现的完整流程，让数据真正服务于决策。" data-en="Defined a core operational metrics framework, built standardized weekly data reports and business review templates. Established the complete pipeline from data collection, cleaning, analysis to visualization — making data truly serve decision-making.">
+              Defined a core operational metrics framework, built standardized weekly data reports and business review templates. Established the complete pipeline from data collection, cleaning, analysis to visualization — making data truly serve decision-making.
+            </p>
+          </div>
+          <div class="project-section">
+            <h4 data-cn="结果" data-en="Results">Results</h4>
+            <p data-cn="团队数据分析效率大幅提升，运营决策从「感觉驱动」转向「数据驱动」。周报和复盘流程标准化后，经营问题能被更早发现和干预。" data-en="Dramatically improved team data analysis efficiency, shifting operational decisions from intuition-driven to data-driven. Standardized reporting and review processes enabled earlier identification and intervention of business issues.">
+              Dramatically improved team data analysis efficiency, shifting operational decisions from intuition-driven to data-driven. Standardized reporting and review processes enabled earlier identification and intervention of business issues.
+            </p>
+          </div>
+          <div class="project-section">
+            <h4 data-cn="核心价值" data-en="Core Value">Core Value</h4>
+            <p data-cn="数据体系不是技术炫技，而是让团队的每个人都能看清楚「我们在哪」和「接下来该做什么」。" data-en="A data system isn't about technical showmanship — it's about making it clear for everyone: 'Where are we?' and 'What should we do next?'">
+              A data system isn't about technical showmanship — it's about making it clear for everyone: 'Where are we?' and 'What should we do next?'
+            </p>
+          </div>
+        </div>
+        <div class="project-tags">
+          <span class="skill-tag">Data System</span>
+          <span class="skill-tag">Dashboard</span>
+          <span class="skill-tag">Weekly Report</span>
+          <span class="skill-tag">Process</span>
+        </div>
+      </div>
+      
+      <!-- Project 4 -->
+      <div class="project-card fade-in">
+        <div class="project-header">
+          <div>
+            <h3 data-cn="财务视角下的产品盈利模型与方案测算" data-en="Product Profitability Modeling from a Financial Perspective">Product Profitability Modeling from a Financial Perspective</h3>
+            <div class="project-subtitle" data-cn="财务建模 × 利润分析 × 投资回报" data-en="Financial Modeling × Profit Analysis × ROI Assessment">Financial Modeling × Profit Analysis × ROI Assessment</div>
+          </div>
+          <div class="project-num">CASE 04</div>
+        </div>
+        <div class="project-body">
+          <div class="project-section">
+            <h4 data-cn="背景与挑战" data-en="Background & Challenge">Background & Challenge</h4>
+            <p data-cn="产品上架决策往往基于粗略估算和竞品参考，缺乏系统的财务测算模型。导致部分产品看似在卖，实际利润为负；部分高潜力产品因错误评估而被放弃。" data-en="Product launch decisions were often based on rough estimates and competitor references, lacking systematic financial models. This led to products that appeared to be selling but were actually profit-negative, while high-potential products were abandoned due to miscalculation.">
+              Product launch decisions were often based on rough estimates and competitor references, lacking systematic financial models. This led to products that appeared to be selling but were actually profit-negative, while high-potential products were abandoned due to miscalculation.
+            </p>
+          </div>
+          <div class="project-section">
+            <h4 data-cn="行动方案" data-en="Action Plan">Action Plan</h4>
+            <p data-cn="构建完整的产品盈利分析模型，覆盖采购成本、头程物流、FBA 费用、广告成本、退货率、汇率波动等变量。引入 ROI、IRR 等财务指标为每个产品方案打分，让决策从拍脑袋转向量化测算。" data-en="Built a comprehensive product profitability model covering procurement costs, first-mile logistics, FBA fees, advertising costs, return rates, and exchange rate fluctuations. Introduced ROI and IRR metrics to score each product proposal, shifting decisions from guesswork to quantitative assessment.">
+              Built a comprehensive product profitability model covering procurement costs, first-mile logistics, FBA fees, advertising costs, return rates, and exchange rate fluctuations. Introduced ROI and IRR metrics to score each product proposal, shifting decisions from guesswork to quantitative assessment.
+            </p>
+          </div>
+          <div class="project-section">
+            <h4 data-cn="结果" data-en="Results">Results</h4>
+            <p data-cn="产品决策质量显著提升，及时识别并淘汰了多个隐性亏损产品，资源集中投入高回报品类。财务模型成为团队日常选品和方案评估的标准工具。" data-en="Significantly improved product decision quality, promptly identifying and eliminating several hidden-loss products while concentrating resources on high-return categories. The financial model became the team's standard tool for product selection and proposal evaluation.">
+              Significantly improved product decision quality, promptly identifying and eliminating several hidden-loss products while concentrating resources on high-return categories. The financial model became the team's standard tool for product selection and proposal evaluation.
+            </p>
+          </div>
+          <div class="project-section">
+            <h4 data-cn="核心价值" data-en="Core Value">Core Value</h4>
+            <p data-cn="运营需要「会算账的人」。把财务思维嵌入运营决策，才能真正从「卖货」升级为「经营」。" data-en="Operations needs someone who can 'do the math.' Embedding financial thinking into operational decisions is what elevates 'selling products' to 'running a business.'">
+              Operations needs someone who can 'do the math.' Embedding financial thinking into operational decisions is what elevates 'selling products' to 'running a business.'
+            </p>
+          </div>
+        </div>
+        <div class="project-tags">
+          <span class="skill-tag">Financial Model</span>
+          <span class="skill-tag">ROI</span>
+          <span class="skill-tag">IRR</span>
+          <span class="skill-tag">Product Analysis</span>
+        </div>
+      </div>
+      
+      <!-- Project 5 -->
+      <div class="project-card fade-in">
+        <div class="project-header">
+          <div>
+            <h3 data-cn="AI 工具辅助运营分析与内容提效实践" data-en="AI-Assisted Operations Analysis & Content Efficiency">AI-Assisted Operations Analysis & Content Efficiency</h3>
+            <div class="project-subtitle" data-cn="AI 应用 × 工作流优化 × 生产力提升" data-en="AI Application × Workflow Optimization × Productivity">AI Application × Workflow Optimization × Productivity</div>
+          </div>
+          <div class="project-num">CASE 05</div>
+        </div>
+        <div class="project-body">
+          <div class="project-section">
+            <h4 data-cn="背景与挑战" data-en="Background & Challenge">Background & Challenge</h4>
+            <p data-cn="日常运营中存在大量重复性工作，如竞品分析报告、Listing 文案优化、数据整理和周报撰写等，消耗大量时间但产出有限，影响核心策略工作的推进。" data-en="Daily operations involved extensive repetitive tasks — competitor analysis reports, listing copy optimization, data organization, weekly report writing — consuming significant time with limited output and impeding core strategic work.">
+              Daily operations involved extensive repetitive tasks — competitor analysis reports, listing copy optimization, data organization, weekly report writing — consuming significant time with limited output and impeding core strategic work.
+            </p>
+          </div>
+          <div class="project-section">
+            <h4 data-cn="行动方案" data-en="Action Plan">Action Plan</h4>
+            <p data-cn="系统性引入 AI 工具到日常工作流中：利用 ChatGPT 和 Claude 辅助竞品分析和 Listing 优化，通过 AI 协助数据清洗和异常检测，搭建 AI 辅助的内容创作流程，并利用 MCP 协议实现 AI 与运营工具的深度集成。" data-en="Systematically integrated AI tools into daily workflows: leveraging ChatGPT and Claude for competitor analysis and listing optimization, AI-assisted data cleaning and anomaly detection, building AI-powered content creation pipelines, and using MCP protocol for deep integration between AI and operational tools.">
+              Systematically integrated AI tools into daily workflows: leveraging ChatGPT and Claude for competitor analysis and listing optimization, AI-assisted data cleaning and anomaly detection, building AI-powered content creation pipelines, and using MCP protocol for deep integration between AI and operational tools.
+            </p>
+          </div>
+          <div class="project-section">
+            <h4 data-cn="结果" data-en="Results">Results</h4>
+            <p data-cn="重复性工作时间显著缩减，核心策略工作占比明显提升。内容产出质量和速度同步提高。AI 工具使用经验沉淀为可复用的提示词库和工作流模板。" data-en="Dramatically reduced time on repetitive tasks, significantly increasing the proportion of core strategic work. Content output quality and speed improved simultaneously. AI usage experience was distilled into reusable prompt libraries and workflow templates.">
+              Dramatically reduced time on repetitive tasks, significantly increasing the proportion of core strategic work. Content output quality and speed improved simultaneously. AI usage experience was distilled into reusable prompt libraries and workflow templates.
+            </p>
+          </div>
+          <div class="project-section">
+            <h4 data-cn="核心价值" data-en="Core Value">Core Value</h4>
+            <p data-cn="AI 不是替代人，而是放大人的判断力和生产力。把 AI 当成团队成员来管理和协作，才是真正的提效。" data-en="AI doesn't replace people — it amplifies human judgment and productivity. Managing and collaborating with AI as a team member is what true efficiency looks like.">
+              AI doesn't replace people — it amplifies human judgment and productivity. Managing and collaborating with AI as a team member is what true efficiency looks like.
+            </p>
+          </div>
+        </div>
+        <div class="project-tags">
+          <span class="skill-tag">AI Tools</span>
+          <span class="skill-tag">ChatGPT</span>
+          <span class="skill-tag">Claude</span>
+          <span class="skill-tag">MCP</span>
+          <span class="skill-tag">Automation</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     METHODOLOGY
+     ═══════════════════════════════════════════ -->
+<section id="methodology">
+  <div class="container">
+    <div class="fade-in" style="text-align:center; max-width:640px; margin:0 auto">
+      <div class="section-label" style="justify-content:center">
+        <span data-cn="方法论" data-en="Philosophy">Philosophy</span>
+      </div>
+      <h2 class="section-title" data-cn="四条原则，区别于普通运营" data-en="Four Principles That Set Me Apart">Four Principles That Set Me Apart</h2>
+      <p class="section-desc" style="margin:0 auto" data-cn="不是做得更多，而是想得更深。这些方法论贯穿我的每一个项目和决策。" data-en="It's not about doing more — it's about thinking deeper. These principles run through every project and decision I make.">
+        It's not about doing more — it's about thinking deeper. These principles run through every project and decision I make.
+      </p>
+    </div>
+    
+    <div class="method-grid stagger fade-in">
+      <div class="method-card">
+        <div class="method-num">I</div>
+        <h3 data-cn="经营视角做运营" data-en="Operate with a Business Lens">Operate with a Business Lens</h3>
+        <p data-cn="不只关注销售额，更关注利润率、资金效率和可持续性。每一个运营动作，都要经过经营逻辑的检验。" data-en="Looking beyond revenue to profit margins, capital efficiency, and sustainability. Every operational action passes through a business logic filter.">
+          Looking beyond revenue to profit margins, capital efficiency, and sustainability. Every operational action passes through a business logic filter.
+        </p>
+      </div>
+      
+      <div class="method-card">
+        <div class="method-num">II</div>
+        <h3 data-cn="数据拆解问题" data-en="Decompose Problems with Data">Decompose Problems with Data</h3>
+        <p data-cn="不凭感觉判断，用数据定位问题根源。把模糊的「感觉不好」变成精确的「哪里不好、差多少、怎么改」。" data-en="No gut-feel decisions. Using data to locate root causes. Turning vague 'something feels off' into precise 'what's wrong, by how much, and how to fix it.'">
+          No gut-feel decisions. Using data to locate root causes. Turning vague 'something feels off' into precise 'what's wrong, by how much, and how to fix it.'
+        </p>
+      </div>
+      
+      <div class="method-card">
+        <div class="method-num">III</div>
+        <h3 data-cn="经验沉淀成系统" data-en="Crystallize Experience into Systems">Crystallize Experience into Systems</h3>
+        <p data-cn="做过一次的事，不应该每次从零开始。把个人经验和团队实践转化成 SOP 和可复用的流程体系。" data-en="What's been done once shouldn't start from scratch every time. Transforming personal experience and team practices into SOPs and reusable process systems.">
+          What's been done once shouldn't start from scratch every time. Transforming personal experience and team practices into SOPs and reusable process systems.
+        </p>
+      </div>
+      
+      <div class="method-card">
+        <div class="method-num">IV</div>
+        <h3 data-cn="AI 放大执行效率" data-en="Amplify Execution with AI">Amplify Execution with AI</h3>
+        <p data-cn="不排斥新工具，用最前沿的 AI 能力来倍增个人和团队的产出效率，把时间留给真正需要判断力的工作。" data-en="Embracing new tools — using cutting-edge AI to multiply individual and team output, reserving time for work that truly requires human judgment.">
+          Embracing new tools — using cutting-edge AI to multiply individual and team output, reserving time for work that truly requires human judgment.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     INSIGHTS
+     ═══════════════════════════════════════════ -->
+<section id="insights">
+  <div class="container">
+    <div class="fade-in">
+      <div class="section-label" data-cn="洞见与输出" data-en="Insights & Writing">Insights & Writing</div>
+      <h2 class="section-title" data-cn="持续输出，持续沉淀" data-en="Consistent Output, Continuous Growth">Consistent Output, Continuous Growth</h2>
+      <p class="section-desc" data-cn="不只是做过，更要说清楚、写下来、分享出去。把经验变成可传递的知识。" data-en="It's not enough to have done it — articulate it, write it down, share it. Turning experience into transferable knowledge.">
+        It's not enough to have done it — articulate it, write it down, share it. Turning experience into transferable knowledge.
+      </p>
+    </div>
+    
+    <div class="insights-categories fade-in">
+      <span class="cat-pill active" data-cn="全部" data-en="All">All</span>
+      <span class="cat-pill" data-cn="亚马逊运营" data-en="Amazon Ops">Amazon Ops</span>
+      <span class="cat-pill" data-cn="广告优化" data-en="PPC Strategy">PPC Strategy</span>
+      <span class="cat-pill" data-cn="数据分析" data-en="Data Analysis">Data Analysis</span>
+      <span class="cat-pill" data-cn="财务思维" data-en="Financial Thinking">Financial Thinking</span>
+      <span class="cat-pill" data-cn="AI 提效" data-en="AI Efficiency">AI Efficiency</span>
+      <span class="cat-pill" data-cn="英语学习" data-en="English Learning">English Learning</span>
+    </div>
+    
+    <div class="insights-grid stagger fade-in">
+      <div class="insight-card">
+        <div class="i-cat" data-cn="亚马逊运营" data-en="Amazon Operations">Amazon Operations</div>
+        <h3 data-cn="多站点运营的「减法哲学」：先做好一个站点" data-en="The 'Subtraction Philosophy' of Multi-Market Ops">The 'Subtraction Philosophy' of Multi-Market Ops</h3>
+        <p data-cn="不是同时铺开四个站点，而是先把一个站点跑通、跑顺，再复制到其他市场。" data-en="Don't spread across four markets at once — master one first, then replicate.">
+          Don't spread across four markets at once — master one first, then replicate.
+        </p>
+        <div class="i-date" data-cn="即将发布" data-en="Coming Soon">Coming Soon</div>
+      </div>
+      
+      <div class="insight-card">
+        <div class="i-cat" data-cn="广告优化" data-en="PPC Strategy">PPC Strategy</div>
+        <h3 data-cn="广告结构决定了你的天花板" data-en="Your Ad Structure Defines Your Ceiling">Your Ad Structure Defines Your Ceiling</h3>
+        <p data-cn="大多数人在优化出价，而真正的问题往往出在广告架构本身。" data-en="Most people optimize bids, but the real problem is usually the ad architecture itself.">
+          Most people optimize bids, but the real problem is usually the ad architecture itself.
+        </p>
+        <div class="i-date" data-cn="即将发布" data-en="Coming Soon">Coming Soon</div>
+      </div>
+      
+      <div class="insight-card">
+        <div class="i-cat" data-cn="AI 提效" data-en="AI Efficiency">AI Efficiency</div>
+        <h3 data-cn="用 Claude + MCP 搭建运营分析助手" data-en="Building an Ops Analysis Assistant with Claude + MCP">Building an Ops Analysis Assistant with Claude + MCP</h3>
+        <p data-cn="如何将 AI 深度集成到跨境电商日常运营工作流中，实现真正的自动化提效。" data-en="How to deeply integrate AI into daily cross-border e-commerce workflows for real automation gains.">
+          How to deeply integrate AI into daily cross-border e-commerce workflows for real automation gains.
+        </p>
+        <div class="i-date" data-cn="即将发布" data-en="Coming Soon">Coming Soon</div>
+      </div>
+      
+      <div class="insight-card">
+        <div class="i-cat" data-cn="财务思维" data-en="Financial Thinking">Financial Thinking</div>
+        <h3 data-cn="运营人必学的三个财务指标：ROI、IRR、NPV" data-en="Three Financial Metrics Every Operator Must Know">Three Financial Metrics Every Operator Must Know</h3>
+        <p data-cn="不懂财务指标的运营，永远只是在「卖货」而不是在「经营」。" data-en="Operators who don't understand financial metrics are forever 'selling,' never 'managing.'">
+          Operators who don't understand financial metrics are forever 'selling,' never 'managing.'
+        </p>
+        <div class="i-date" data-cn="即将发布" data-en="Coming Soon">Coming Soon</div>
+      </div>
+      
+      <div class="insight-card">
+        <div class="i-cat" data-cn="数据分析" data-en="Data Analysis">Data Analysis</div>
+        <h3 data-cn="从零搭建跨境电商数据周报体系" data-en="Building a Weekly Data Report System from Scratch">Building a Weekly Data Report System from Scratch</h3>
+        <p data-cn="不是更多的数据，而是更有用的数据。分享我的数据周报搭建逻辑和模板。" data-en="Not more data, but more useful data. Sharing my weekly report logic and templates.">
+          Not more data, but more useful data. Sharing my weekly report logic and templates.
+        </p>
+        <div class="i-date" data-cn="即将发布" data-en="Coming Soon">Coming Soon</div>
+      </div>
+      
+      <div class="insight-card">
+        <div class="i-cat" data-cn="英语学习" data-en="English Learning">English Learning</div>
+        <h3 data-cn="跨境电商场景英语：从 Listing 到客户邮件" data-en="E-Commerce English: From Listings to Customer Emails">E-Commerce English: From Listings to Customer Emails</h3>
+        <p data-cn="不背单词，学真正在跨境场景中用得上的表达方式。" data-en="No rote memorization — learn expressions that actually work in cross-border scenarios.">
+          No rote memorization — learn expressions that actually work in cross-border scenarios.
+        </p>
+        <div class="i-date" data-cn="即将发布" data-en="Coming Soon">Coming Soon</div>
+      </div>
+    </div>
+    
+    <div style="text-align:center; margin-top:40px" class="fade-in">
+      <a href="#" class="btn btn-outline" data-cn="查看所有文章 →" data-en="View All Articles →">View All Articles →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     COURSES & SERVICES
+     ═══════════════════════════════════════════ -->
+<section id="services">
+  <div class="container">
+    <div class="fade-in">
+      <div class="section-label" data-cn="课程与服务" data-en="Courses & Services">Courses & Services</div>
+      <h2 class="section-title" data-cn="从模板到课程到咨询，一站解决" data-en="Templates, Courses & Consulting — All in One Place">Templates, Courses & Consulting — All in One Place</h2>
+      <p class="section-desc" data-cn="把我的实战经验系统化输出，帮你少走弯路、提升效率。" data-en="My real-world experience, systematically packaged to help you avoid detours and boost efficiency.">
+        My real-world experience, systematically packaged to help you avoid detours and boost efficiency.
+      </p>
+    </div>
+    
+    <div class="cs-tabs fade-in" style="margin-top:32px">
+      <button class="cs-tab active" onclick="switchTab('templates')" data-cn="模板工具包" data-en="Templates">Templates</button>
+      <button class="cs-tab" onclick="switchTab('courses')" data-cn="系统课程" data-en="Courses">Courses</button>
+      <button class="cs-tab" onclick="switchTab('consulting')" data-cn="咨询服务" data-en="Consulting">Consulting</button>
+    </div>
+    
+    <!-- Templates Panel -->
+    <div class="cs-panel active" id="panel-templates">
+      <div class="template-grid stagger fade-in visible">
+        <div class="template-card">
+          <h3 data-cn="📋 亚马逊运营周报模板包" data-en="📋 Amazon Weekly Report Template Pack">📋 Amazon Weekly Report Template Pack</h3>
+          <div class="t-audience" data-cn="适合：亚马逊运营新人 / 运营主管 / 团队管理者" data-en="For: Amazon operators, team leads, operations managers">For: Amazon operators, team leads, operations managers</div>
+          <div class="t-desc" data-cn="一套可直接使用的周报模板体系，涵盖销售、广告、库存、利润四大维度，附带数据填写说明和复盘指引。" data-en="A ready-to-use weekly report template system covering sales, advertising, inventory, and profit dimensions, with data entry guides and review instructions.">
+            A ready-to-use weekly report template system covering sales, advertising, inventory, and profit dimensions, with data entry guides and review instructions.
+          </div>
+          <ul class="t-includes">
+            <li data-cn="销售数据周报模板" data-en="Sales data weekly template">Sales data weekly template</li>
+            <li data-cn="广告数据追踪表" data-en="Ad performance tracker">Ad performance tracker</li>
+            <li data-cn="库存健康度监控表" data-en="Inventory health monitor">Inventory health monitor</li>
+            <li data-cn="利润分析简报模板" data-en="Profit analysis brief template">Profit analysis brief template</li>
+            <li data-cn="经营复盘会议模板" data-en="Business review meeting template">Business review meeting template</li>
+          </ul>
+          <a href="#" class="btn btn-outline btn-sm" data-cn="了解详情" data-en="Learn More">Learn More</a>
+        </div>
+        
+        <div class="template-card">
+          <h3 data-cn="💰 利润测算与经营分析模板包" data-en="💰 Profit Modeling & Analysis Template Pack">💰 Profit Modeling & Analysis Template Pack</h3>
+          <div class="t-audience" data-cn="适合：电商老板 / 运营主管 / 财务背景转运营" data-en="For: E-commerce owners, operations leads, finance-to-ops transitions">For: E-commerce owners, operations leads, finance-to-ops transitions</div>
+          <div class="t-desc" data-cn="一套完整的产品盈利分析工具包，帮你从财务视角评估每一个产品决策和运营方案。" data-en="A complete product profitability toolkit, helping you evaluate every product decision and operational plan from a financial perspective.">
+            A complete product profitability toolkit, helping you evaluate every product decision and operational plan from a financial perspective.
+          </div>
+          <ul class="t-includes">
+            <li data-cn="产品利润测算模型" data-en="Product profit calculation model">Product profit calculation model</li>
+            <li data-cn="FBA 费用估算工具" data-en="FBA fee estimator">FBA fee estimator</li>
+            <li data-cn="ROI / IRR 对比分析表" data-en="ROI / IRR comparison sheet">ROI / IRR comparison sheet</li>
+            <li data-cn="方案对比决策矩阵" data-en="Proposal comparison decision matrix">Proposal comparison decision matrix</li>
+          </ul>
+          <a href="#" class="btn btn-outline btn-sm" data-cn="了解详情" data-en="Learn More">Learn More</a>
+        </div>
+        
+        <div class="template-card">
+          <h3 data-cn="🎯 广告结构搭建模板包" data-en="🎯 PPC Structure Builder Template Pack">🎯 PPC Structure Builder Template Pack</h3>
+          <div class="t-audience" data-cn="适合：亚马逊运营 / 广告优化师 / 运营团队" data-en="For: Amazon operators, PPC specialists, operations teams">For: Amazon operators, PPC specialists, operations teams</div>
+          <div class="t-desc" data-cn="系统化的广告结构搭建指南和模板，帮你告别混乱投放，建立清晰的三层广告架构。" data-en="Systematic ad structure guide and templates to end chaotic spending and build a clear three-tier advertising architecture.">
+            Systematic ad structure guide and templates to end chaotic spending and build a clear three-tier advertising architecture.
+          </div>
+          <ul class="t-includes">
+            <li data-cn="三层广告架构设计表" data-en="Three-tier ad architecture template">Three-tier ad architecture template</li>
+            <li data-cn="关键词分级管理表" data-en="Keyword tier management sheet">Keyword tier management sheet</li>
+            <li data-cn="广告数据周复盘表" data-en="Weekly PPC review template">Weekly PPC review template</li>
+            <li data-cn="预算分配参考模型" data-en="Budget allocation reference model">Budget allocation reference model</li>
+          </ul>
+          <a href="#" class="btn btn-outline btn-sm" data-cn="了解详情" data-en="Learn More">Learn More</a>
+        </div>
+        
+        <div class="template-card">
+          <h3 data-cn="⚙️ SOP 流程工具包" data-en="⚙️ SOP & Process Toolkit">⚙️ SOP & Process Toolkit</h3>
+          <div class="t-audience" data-cn="适合：运营团队管理者 / 创业初期团队" data-en="For: Operations managers, early-stage teams">For: Operations managers, early-stage teams</div>
+          <div class="t-desc" data-cn="把日常运营中的核心动作标准化，快速搭建可复用的团队工作流。" data-en="Standardize core daily operations actions and quickly build reusable team workflows.">
+            Standardize core daily operations actions and quickly build reusable team workflows.
+          </div>
+          <ul class="t-includes">
+            <li data-cn="新品上架 SOP 模板" data-en="New product launch SOP">New product launch SOP</li>
+            <li data-cn="广告日常优化 SOP" data-en="Daily PPC optimization SOP">Daily PPC optimization SOP</li>
+            <li data-cn="库存补货流程 SOP" data-en="Inventory replenishment SOP">Inventory replenishment SOP</li>
+            <li data-cn="SOP 编写指南和模板" data-en="SOP writing guide and template">SOP writing guide and template</li>
+          </ul>
+          <a href="#" class="btn btn-outline btn-sm" data-cn="了解详情" data-en="Learn More">Learn More</a>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Courses Panel -->
+    <div class="cs-panel" id="panel-courses">
+      <div class="course-grid stagger">
+        <div class="course-card">
+          <span class="c-badge flagship" data-cn="主力课程" data-en="Flagship">Flagship</span>
+          <h3 data-cn="亚马逊运营实操课" data-en="Amazon Operations Masterclass">Amazon Operations Masterclass</h3>
+          <div class="c-audience" data-cn="适合：0-2年经验运营 / 转行入行者" data-en="For: 0-2 year operators / career switchers">For: 0-2 year operators / career switchers</div>
+          <p class="c-desc" data-cn="从账号搭建到盈利闭环，一套完整的亚马逊实操体系课。不讲理论空话，只讲能直接落地的操作方法。" data-en="From account setup to profit loops — a complete Amazon operations system. No theory fluff, only actionable methods.">
+            From account setup to profit loops — a complete Amazon operations system. No theory fluff, only actionable methods.
+          </p>
+          <ul class="c-modules">
+            <li data-cn="账号与后台设置" data-en="Account & backend setup">Account & backend setup</li>
+            <li data-cn="选品方法与工具" data-en="Product selection methods">Product selection methods</li>
+            <li data-cn="Listing 优化体系" data-en="Listing optimization system">Listing optimization system</li>
+            <li data-cn="FBA 物流与成本" data-en="FBA logistics & costs">FBA logistics & costs</li>
+            <li data-cn="广告结构与投放" data-en="PPC structure & management">PPC structure & management</li>
+            <li data-cn="库存管理实操" data-en="Inventory management">Inventory management</li>
+            <li data-cn="数据分析与周报" data-en="Data analysis & reporting">Data analysis & reporting</li>
+            <li data-cn="利润计算与复盘" data-en="Profit calculation & review">Profit calculation & review</li>
+          </ul>
+        </div>
+        
+        <div class="course-card">
+          <span class="c-badge advanced" data-cn="进阶课程" data-en="Advanced">Advanced</span>
+          <h3 data-cn="跨境电商数据分析课" data-en="E-Commerce Data Analytics Course">E-Commerce Data Analytics Course</h3>
+          <div class="c-audience" data-cn="适合：运营主管 / 数据分析岗 / 希望提升数据能力的运营" data-en="For: Team leads / analysts / operators seeking data skills">For: Team leads / analysts / operators seeking data skills</div>
+          <p class="c-desc" data-cn="从数据采集到可视化决策，系统学习跨境电商场景下的数据分析方法论和实操工具。" data-en="From data collection to visual decision-making — systematically learn data analysis methodology and tools for cross-border e-commerce.">
+            From data collection to visual decision-making — systematically learn data analysis methodology and tools for cross-border e-commerce.
+          </p>
+          <ul class="c-modules">
+            <li data-cn="核心指标体系构建" data-en="Core metrics framework">Core metrics framework</li>
+            <li data-cn="数据采集与清洗" data-en="Data collection & cleaning">Data collection & cleaning</li>
+            <li data-cn="销售数据分析" data-en="Sales data analysis">Sales data analysis</li>
+            <li data-cn="广告数据深度分析" data-en="Deep PPC data analysis">Deep PPC data analysis</li>
+            <li data-cn="库存与供应链数据" data-en="Inventory & supply chain data">Inventory & supply chain data</li>
+            <li data-cn="利润与成本分析" data-en="Profit & cost analysis">Profit & cost analysis</li>
+            <li data-cn="数据看板搭建" data-en="Dashboard building">Dashboard building</li>
+            <li data-cn="数据驱动复盘机制" data-en="Data-driven review system">Data-driven review system</li>
+          </ul>
+        </div>
+        
+        <div class="course-card">
+          <span class="c-badge advanced" data-cn="进阶课程" data-en="Advanced">Advanced</span>
+          <h3 data-cn="财务思维赋能运营课" data-en="Financial Thinking for Operators">Financial Thinking for Operators</h3>
+          <div class="c-audience" data-cn="适合：电商老板 / 运营主管 / 希望理解经营逻辑的运营" data-en="For: E-commerce owners / leads / operators wanting business acumen">For: E-commerce owners / leads / operators wanting business acumen</div>
+          <p class="c-desc" data-cn="用通俗易懂的方式讲解运营人最需要掌握的财务知识，让你的每一个决策都有数字支撑。" data-en="Financial knowledge operators need most, explained in accessible language. Give every decision numerical backing.">
+            Financial knowledge operators need most, explained in accessible language. Give every decision numerical backing.
+          </p>
+          <ul class="c-modules">
+            <li data-cn="运营人的财务基础" data-en="Finance basics for operators">Finance basics for operators</li>
+            <li data-cn="利润模型搭建" data-en="Profit model building">Profit model building</li>
+            <li data-cn="ROI 与投资回报分析" data-en="ROI & return analysis">ROI & return analysis</li>
+            <li data-cn="IRR 与方案对比" data-en="IRR & proposal comparison">IRR & proposal comparison</li>
+            <li data-cn="NPV 与长期决策" data-en="NPV & long-term decisions">NPV & long-term decisions</li>
+            <li data-cn="预算管理实操" data-en="Budget management practice">Budget management practice</li>
+          </ul>
+        </div>
+        
+        <div class="course-card">
+          <span class="c-badge lead-gen" data-cn="引流课程" data-en="Lead Gen">Lead Gen</span>
+          <h3 data-cn="AI 提效实战课" data-en="AI Efficiency Bootcamp">AI Efficiency Bootcamp</h3>
+          <div class="c-audience" data-cn="适合：所有跨境电商从业者 / 对 AI 感兴趣的运营" data-en="For: All e-commerce professionals / AI-curious operators">For: All e-commerce professionals / AI-curious operators</div>
+          <p class="c-desc" data-cn="不讲 AI 原理，只讲 AI 怎么用。用真实的跨境电商工作场景，手把手教你用 AI 提升效率。" data-en="No AI theory — only how to use it. Real cross-border e-commerce scenarios, hands-on AI efficiency techniques.">
+            No AI theory — only how to use it. Real cross-border e-commerce scenarios, hands-on AI efficiency techniques.
+          </p>
+          <ul class="c-modules">
+            <li data-cn="AI 工具选型与配置" data-en="AI tool selection & setup">AI tool selection & setup</li>
+            <li data-cn="Listing 优化提效" data-en="Listing optimization with AI">Listing optimization with AI</li>
+            <li data-cn="竞品分析自动化" data-en="Automated competitor analysis">Automated competitor analysis</li>
+            <li data-cn="数据处理与报告" data-en="Data processing & reports">Data processing & reports</li>
+            <li data-cn="内容创作提效" data-en="Content creation efficiency">Content creation efficiency</li>
+            <li data-cn="MCP 与工作流集成" data-en="MCP & workflow integration">MCP & workflow integration</li>
+            <li data-cn="提示词工程实战" data-en="Prompt engineering practice">Prompt engineering practice</li>
+            <li data-cn="AI 协作最佳实践" data-en="AI collaboration best practices">AI collaboration best practices</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Consulting Panel -->
+    <div class="cs-panel" id="panel-consulting">
+      <div class="consult-grid stagger">
+        <div class="consult-card">
+          <h3 data-cn="🔍 店铺经营诊断" data-en="🔍 Store Operations Diagnosis">🔍 Store Operations Diagnosis</h3>
+          <div class="t-audience" data-cn="适合：经营遇到瓶颈的亚马逊卖家" data-en="For: Amazon sellers hitting growth plateaus">For: Amazon sellers hitting growth plateaus</div>
+          <p class="co-desc" data-cn="从销售、广告、库存、利润四个维度全面诊断店铺经营状况，找出核心问题并提供优先级行动建议。" data-en="Comprehensive store diagnosis across sales, advertising, inventory, and profit dimensions. Identify core issues and provide prioritized action recommendations.">
+            Comprehensive store diagnosis across sales, advertising, inventory, and profit dimensions. Identify core issues and provide prioritized action recommendations.
+          </p>
+        </div>
+        
+        <div class="consult-card">
+          <h3 data-cn="🎯 广告结构诊断" data-en="🎯 PPC Structure Audit">🎯 PPC Structure Audit</h3>
+          <div class="t-audience" data-cn="适合：ACoS 居高不下、广告结构混乱的卖家" data-en="For: Sellers with high ACoS and chaotic ad structures">For: Sellers with high ACoS and chaotic ad structures</div>
+          <p class="co-desc" data-cn="深度分析现有广告架构，识别浪费点和优化空间，提供可落地的结构重构方案和关键词策略。" data-en="Deep analysis of existing ad architecture, identifying waste and optimization opportunities. Delivering actionable restructuring plans and keyword strategies.">
+            Deep analysis of existing ad architecture, identifying waste and optimization opportunities. Delivering actionable restructuring plans and keyword strategies.
+          </p>
+        </div>
+        
+        <div class="consult-card">
+          <h3 data-cn="📊 数据体系搭建咨询" data-en="📊 Data System Consulting">📊 Data System Consulting</h3>
+          <div class="t-audience" data-cn="适合：缺乏数据分析体系的运营团队" data-en="For: Teams lacking data analysis infrastructure">For: Teams lacking data analysis infrastructure</div>
+          <p class="co-desc" data-cn="帮你建立从指标定义、数据采集到可视化看板的完整数据分析体系，让数据真正服务于决策。" data-en="Building your complete data system — from metric definitions and data collection to visualization dashboards. Making data truly serve decisions.">
+            Building your complete data system — from metric definitions and data collection to visualization dashboards. Making data truly serve decisions.
+          </p>
+        </div>
+        
+        <div class="consult-card">
+          <h3 data-cn="🤖 AI 提效工作流咨询" data-en="🤖 AI Workflow Consulting">🤖 AI Workflow Consulting</h3>
+          <div class="t-audience" data-cn="适合：想引入 AI 但不知从何开始的团队" data-en="For: Teams wanting AI but unsure where to start">For: Teams wanting AI but unsure where to start</div>
+          <p class="co-desc" data-cn="评估你的业务场景，定制 AI 工具引入方案，设计适合你团队的 AI 提效工作流。" data-en="Assess your business scenarios, customize AI tool adoption plans, and design AI efficiency workflows tailored to your team.">
+            Assess your business scenarios, customize AI tool adoption plans, and design AI efficiency workflows tailored to your team.
+          </p>
+        </div>
+        
+        <div class="consult-card">
+          <h3 data-cn="⚙️ SOP 与流程搭建咨询" data-en="⚙️ SOP & Process Consulting">⚙️ SOP & Process Consulting</h3>
+          <div class="t-audience" data-cn="适合：团队扩张期 / 流程混乱的运营团队" data-en="For: Scaling teams / teams with chaotic processes">For: Scaling teams / teams with chaotic processes</div>
+          <p class="co-desc" data-cn="帮你梳理核心业务流程，搭建标准化 SOP 体系，让团队运转更高效、更可控。" data-en="Mapping core business processes, building standardized SOP systems, making team operations more efficient and controllable.">
+            Mapping core business processes, building standardized SOP systems, making team operations more efficient and controllable.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     SUPPORT
+     ═══════════════════════════════════════════ -->
+<section id="support">
+  <div class="container">
+    <div class="support-box fade-in">
+      <div class="support-icon">☕</div>
+      <div class="section-label" style="justify-content:center" data-cn="支持持续创作" data-en="Support My Work">
+        <span>Support My Work</span>
+      </div>
+      <h2 class="section-title" data-cn="请我喝杯咖啡" data-en="Buy Me a Coffee">Buy Me a Coffee</h2>
+      <p data-cn="如果这些关于跨境电商、数据分析、财务思维和 AI 提效的内容对你有帮助，欢迎支持我持续输出更多实用内容。每一份支持，都是我继续分享的动力。" data-en="If my content on cross-border e-commerce, data analytics, financial thinking, and AI efficiency has been helpful, consider supporting my continued output. Every contribution fuels more practical knowledge sharing.">
+        If my content on cross-border e-commerce, data analytics, financial thinking, and AI efficiency has been helpful, consider supporting my continued output. Every contribution fuels more practical knowledge sharing.
+      </p>
+      <div class="support-methods">
+        <div class="support-method">💚 <span data-cn="微信支付" data-en="WeChat Pay">WeChat Pay</span></div>
+        <div class="support-method">🔵 <span data-cn="支付宝" data-en="Alipay">Alipay</span></div>
+        <div class="support-method">🅿️ PayPal</div>
+        <div class="support-method">💳 Stripe</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     CONTACT
+     ═══════════════════════════════════════════ -->
+<section id="contact">
+  <div class="container">
+    <div class="contact-grid">
+      <div class="fade-in">
+        <div class="section-label" data-cn="联系我" data-en="Get in Touch">Get in Touch</div>
+        <h2 class="section-title" data-cn="有想法？聊聊看。" data-en="Have an idea? Let's talk.">Have an idea? Let's talk.</h2>
+        <p class="section-desc" data-cn="无论是合作、咨询还是只是想交流跨境电商和 AI 的话题，欢迎与我联系。" data-en="Whether it's collaboration, consulting, or just exchanging ideas about e-commerce and AI — I'd love to hear from you.">
+          Whether it's collaboration, consulting, or just exchanging ideas about e-commerce and AI — I'd love to hear from you.
+        </p>
+        
+        <div class="contact-info" style="margin-top:32px">
+          <div class="ci-item">
+            <div class="ci-icon">📧</div>
+            <div>
+              <h4>Email</h4>
+              <p>neo@example.com</p>
+            </div>
+          </div>
+          <div class="ci-item">
+            <div class="ci-icon">💬</div>
+            <div>
+              <h4 data-cn="微信" data-en="WeChat">WeChat</h4>
+              <p data-cn="扫码添加" data-en="Scan to connect">Scan to connect</p>
+            </div>
+          </div>
+          <div class="ci-item">
+            <div class="ci-icon">🐦</div>
+            <div>
+              <h4>Social</h4>
+              <p>Twitter / LinkedIn / 小红书</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="contact-form fade-in">
+        <input type="text" data-placeholder-cn="你的名字" data-placeholder-en="Your name" placeholder="Your name">
+        <input type="email" data-placeholder-cn="你的邮箱" data-placeholder-en="Your email" placeholder="Your email">
+        <input type="text" data-placeholder-cn="主题" data-placeholder-en="Subject" placeholder="Subject">
+        <textarea data-placeholder-cn="你想说的..." data-placeholder-en="Your message..." placeholder="Your message..."></textarea>
+        <button class="btn btn-primary" style="width:100%" data-cn="发送消息 →" data-en="Send Message →">Send Message →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     FOOTER
+     ═══════════════════════════════════════════ -->
+<footer>
+  <div class="container">
+    <div class="footer-brand">NEO</div>
+    <div class="footer-tagline" data-cn="以经营视角，做长期主义的事。" data-en="Operating with a business lens. Building for the long term.">Operating with a business lens. Building for the long term.</div>
+    <ul class="footer-links">
+      <li><a href="#about" data-cn="关于" data-en="About">About</a></li>
+      <li><a href="#projects" data-cn="案例" data-en="Projects">Projects</a></li>
+      <li><a href="#services" data-cn="服务" data-en="Services">Services</a></li>
+      <li><a href="#insights" data-cn="洞见" data-en="Insights">Insights</a></li>
+      <li><a href="#contact" data-cn="联系" data-en="Contact">Contact</a></li>
+    </ul>
+    <div class="footer-copy">© 2026 Neo. <span data-cn="跨境电商 × 数据分析 × 财务思维 × AI 提效" data-en="Cross-Border E-Commerce × Data × Finance × AI">Cross-Border E-Commerce × Data × Finance × AI</span></div>
+  </div>
+</footer>
+
+<!-- ═══════════════════════════════════════════
+     JAVASCRIPT
+     ═══════════════════════════════════════════ -->
+<script>
+// Language state
+let currentLang = 'en';
+
+function toggleLang() {
+  currentLang = currentLang === 'en' ? 'cn' : 'en';
+  document.getElementById('langToggle').textContent = currentLang === 'en' ? 'EN' : '中';
+  
+  // Update all text elements with data-cn/data-en
+  document.querySelectorAll('[data-cn]').forEach(el => {
+    const text = el.getAttribute(`data-${currentLang}`);
+    if (text) el.innerHTML = text;
+  });
+  
+  // Update placeholders
+  document.querySelectorAll('[data-placeholder-cn]').forEach(el => {
+    el.placeholder = el.getAttribute(`data-placeholder-${currentLang}`);
+  });
+}
+
+// Theme state
+function toggleTheme() {
+  const html = document.documentElement;
+  const current = html.getAttribute('data-theme');
+  const next = current === 'dark' ? 'light' : 'dark';
+  html.setAttribute('data-theme', next);
+  document.getElementById('themeToggle').textContent = next === 'dark' ? '☀' : '☾';
+}
+
+// Tab switching
+function switchTab(tabName) {
+  document.querySelectorAll('.cs-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.cs-panel').forEach(p => p.classList.remove('active'));
+  
+  event.target.classList.add('active');
+  document.getElementById(`panel-${tabName}`).classList.add('active');
+}
+
+// Mobile menu
+function toggleMobileMenu() {
+  document.getElementById('mobileNav').classList.toggle('open');
+}
+
+function closeMobileMenu() {
+  document.getElementById('mobileNav').classList.remove('open');
+}
+
+function scrollToTop() {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Scroll animations
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+document.querySelectorAll('.fade-in, .stagger').forEach(el => observer.observe(el));
+
+// Active nav link on scroll
+const sections = document.querySelectorAll('section[id]');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(section => {
+    const sectionTop = section.offsetTop - 100;
+    if (scrollY >= sectionTop) {
+      current = section.getAttribute('id');
+    }
+  });
+  
+  document.querySelectorAll('.nav-links a').forEach(a => {
+    a.classList.remove('active');
+    if (a.getAttribute('href') === `#${current}`) {
+      a.classList.add('active');
+    }
+  });
+});
+</script>
+
+</body>
+</html>
