@@ -2484,12 +2484,13 @@ const NOTION_CONFIG = {
 // LANGUAGE STATE
 // ═══════════════════════════════════════════
 let currentLang = 'en';
+let cachedData = { insights: null, courses: null, templates: null, consulting: null };
 
 function toggleLang() {
   currentLang = currentLang === 'en' ? 'cn' : 'en';
   document.getElementById('langToggle').textContent = currentLang === 'en' ? 'EN' : '中';
   
-  // Update all text elements with data-cn/data-en
+  // Update all static text elements with data-cn/data-en
   document.querySelectorAll('[data-cn]').forEach(el => {
     const text = el.getAttribute(`data-${currentLang}`);
     if (text) el.innerHTML = text;
@@ -2499,6 +2500,12 @@ function toggleLang() {
   document.querySelectorAll('[data-placeholder-cn]').forEach(el => {
     el.placeholder = el.getAttribute(`data-placeholder-${currentLang}`);
   });
+  
+  // Re-render Notion dynamic content with new language
+  if (cachedData.insights) renderInsights(cachedData.insights);
+  if (cachedData.templates) renderTemplates(cachedData.templates);
+  if (cachedData.courses) renderCourses(cachedData.courses);
+  if (cachedData.consulting) renderConsulting(cachedData.consulting);
 }
 
 // ═══════════════════════════════════════════
@@ -2762,8 +2769,6 @@ document.addEventListener('DOMContentLoaded', initNotion);
 // ═══════════════════════════════════════════
 // MODAL SYSTEM
 // ═══════════════════════════════════════════
-
-let cachedData = { insights: null, courses: null, templates: null, consulting: null };
 
 function openModal() {
   document.getElementById('detailModal').classList.add('open');
