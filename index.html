@@ -1155,6 +1155,191 @@ footer {
 }
 
 /* ═══════════════════════════════════════════
+   DETAIL MODAL
+   ═══════════════════════════════════════════ */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  overflow-y: auto;
+  padding: 40px 20px;
+  animation: modalFadeIn 0.3s var(--ease);
+}
+
+.modal-overlay.open { display: flex; justify-content: center; align-items: flex-start; }
+
+@keyframes modalFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.modal-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  max-width: 720px;
+  width: 100%;
+  position: relative;
+  animation: modalSlideUp 0.4s var(--ease);
+  margin: 40px auto;
+}
+
+@keyframes modalSlideUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.modal-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  z-index: 10;
+}
+
+.modal-close:hover { border-color: var(--gold); color: var(--gold); }
+
+.modal-header {
+  padding: 32px 32px 0;
+}
+
+.modal-header .m-badge {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 100px;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  background: rgba(200,162,101,0.12);
+  color: var(--gold);
+}
+
+.modal-header h2 {
+  font-size: 1.5rem;
+  margin-bottom: 8px;
+}
+
+.modal-header .m-meta {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+
+.modal-body {
+  padding: 24px 32px 32px;
+}
+
+.modal-body p { color: var(--text-secondary); line-height: 1.8; margin-bottom: 16px; font-size: 0.95rem; }
+.modal-body h2 { font-size: 1.3rem; margin: 24px 0 12px; color: var(--text-primary); }
+.modal-body h3 { font-size: 1.1rem; margin: 20px 0 10px; color: var(--text-primary); }
+.modal-body h4 { font-size: 1rem; margin: 16px 0 8px; color: var(--text-primary); }
+.modal-body ul, .modal-body ol { padding-left: 20px; margin-bottom: 16px; }
+.modal-body li { color: var(--text-secondary); line-height: 1.8; font-size: 0.9rem; margin-bottom: 4px; }
+.modal-body blockquote { border-left: 2px solid var(--gold); padding-left: 16px; margin: 16px 0; font-style: italic; color: var(--text-muted); }
+.modal-body hr { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+.modal-body img { max-width: 100%; border-radius: 8px; margin: 16px 0; }
+.modal-body pre { background: var(--code-bg); padding: 16px; border-radius: 8px; overflow-x: auto; margin: 16px 0; }
+.modal-body code { font-family: monospace; font-size: 0.85rem; }
+.modal-body .callout { padding: 16px; border-radius: 8px; background: rgba(200,162,101,0.06); border: 1px solid var(--border); margin: 16px 0; }
+.modal-body a { color: var(--gold); text-decoration: underline; }
+
+.modal-loading {
+  text-align: center;
+  padding: 48px;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.modal-loading .spinner {
+  width: 28px;
+  height: 28px;
+  border: 2px solid var(--border);
+  border-top-color: var(--gold);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin: 0 auto 12px;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Payment Gate */
+.paywall {
+  text-align: center;
+  padding: 40px 32px;
+  border-top: 1px solid var(--border);
+}
+
+.paywall .lock-icon {
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 16px;
+  border-radius: 50%;
+  background: rgba(200,162,101,0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+}
+
+.paywall h3 { font-size: 1.1rem; margin-bottom: 8px; }
+.paywall .price-tag { font-family: var(--font-display); font-size: 1.8rem; font-weight: 800; color: var(--gold); margin: 12px 0; }
+.paywall p { font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 20px; max-width: 400px; margin-left: auto; margin-right: auto; line-height: 1.7; }
+
+.paywall .pay-methods {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+
+.paywall .pay-btn {
+  padding: 10px 24px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg-elevated);
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-family: var(--font-body);
+}
+
+.paywall .pay-btn:hover { border-color: var(--gold); color: var(--gold); }
+.paywall .pay-btn.primary { background: var(--gold); color: #080C14; border-color: var(--gold); }
+.paywall .pay-btn.primary:hover { background: var(--gold-light); }
+
+@media (max-width: 768px) {
+  .modal-card { margin: 20px auto; }
+  .modal-header, .modal-body { padding-left: 20px; padding-right: 20px; }
+}
+
+/* ═══════════════════════════════════════════
+   CLICKABLE CARDS
+   ═══════════════════════════════════════════ */
+.insight-card[data-id], .course-card[data-id], .template-card[data-id], .consult-card[data-id] {
+  cursor: pointer;
+}
+
+/* ═══════════════════════════════════════════
    LOADING SKELETONS (Notion integration)
    ═══════════════════════════════════════════ */
 .skeleton {
@@ -2248,6 +2433,19 @@ footer {
 </section>
 
 <!-- ═══════════════════════════════════════════
+     DETAIL MODAL
+     ═══════════════════════════════════════════ -->
+<div class="modal-overlay" id="detailModal">
+  <div class="modal-card">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-header" id="modalHeader"></div>
+    <div class="modal-body" id="modalBody">
+      <div class="modal-loading"><div class="spinner"></div>加载中...</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
      FOOTER
      ═══════════════════════════════════════════ -->
 <footer>
@@ -2433,20 +2631,19 @@ function skeletonCards(count, container) {
 
 // ── Render: Insights from Notion ──
 function renderInsights(data) {
+  cachedData.insights = data;
   const grid = document.getElementById('insights-grid');
-  if (!data.items || data.items.length === 0) return; // Keep static fallback
+  if (!data.items || data.items.length === 0) return;
   
-  // Hide static fallback
   const staticGrid = document.getElementById('insights-static');
   if (staticGrid) staticGrid.style.display = 'none';
   
   grid.innerHTML = data.items.map(item => `
-    <div class="insight-card">
+    <div class="insight-card" data-id="${item.id}" onclick="openInsight('${item.id}')">
       <div class="i-cat" data-cn="${item.category}" data-en="${item.category}">${currentLang === 'cn' ? item.category : item.category}</div>
       <h3 data-cn="${esc(item.title)}" data-en="${esc(item.titleEN)}">${currentLang === 'cn' ? esc(item.title) : esc(item.titleEN)}</h3>
       <p data-cn="${esc(item.summary)}" data-en="${esc(item.summaryEN)}">${currentLang === 'cn' ? esc(item.summary) : esc(item.summaryEN)}</p>
       <div class="i-date">${item.date || ''}</div>
-      ${item.link ? `<a href="${esc(item.link)}" target="_blank" class="btn btn-ghost" style="margin-top:8px; padding:8px 0; font-size:0.82rem" data-cn="阅读全文 →" data-en="Read More →">${currentLang === 'cn' ? '阅读全文 →' : 'Read More →'}</a>` : ''}
     </div>
   `).join('');
   
@@ -2455,24 +2652,26 @@ function renderInsights(data) {
 
 // ── Render: Templates from Notion ──
 function renderTemplates(data) {
+  cachedData.templates = data;
   const container = document.querySelector('#panel-templates .template-grid');
   if (!data.items || data.items.length === 0 || !container) return;
   
   container.innerHTML = data.items.map(item => `
-    <div class="template-card">
-      <h3 data-cn="${esc(item.icon)} ${esc(item.title)}" data-en="${esc(item.icon)} ${esc(item.titleEN)}">${item.icon} ${currentLang === 'cn' ? esc(item.title) : esc(item.titleEN)}</h3>
-      <div class="t-audience" data-cn="适合：${esc(item.audience)}" data-en="For: ${esc(item.audienceEN)}">${currentLang === 'cn' ? '适合：' + esc(item.audience) : 'For: ' + esc(item.audienceEN)}</div>
-      <div class="t-desc" data-cn="${esc(item.description)}" data-en="${esc(item.descriptionEN)}">${currentLang === 'cn' ? esc(item.description) : esc(item.descriptionEN)}</div>
+    <div class="template-card" data-id="${item.id}" onclick="openTemplate('${item.id}')">
+      <h3>${item.icon} ${currentLang === 'cn' ? esc(item.title) : esc(item.titleEN)}</h3>
+      <div class="t-audience">${currentLang === 'cn' ? '适合：' + esc(item.audience) : 'For: ' + esc(item.audienceEN)}</div>
+      <div class="t-desc">${currentLang === 'cn' ? esc(item.description) : esc(item.descriptionEN)}</div>
       <ul class="t-includes">
         ${(currentLang === 'cn' ? item.includes : item.includesEN).map(inc => `<li>${esc(inc)}</li>`).join('')}
       </ul>
-      <a href="#" class="btn btn-outline btn-sm" data-cn="了解详情" data-en="Learn More">${currentLang === 'cn' ? '了解详情' : 'Learn More'}</a>
+      <span class="btn btn-outline btn-sm">${currentLang === 'cn' ? '查看详情 →' : 'View Details →'}</span>
     </div>
   `).join('');
 }
 
 // ── Render: Courses from Notion ──
 function renderCourses(data) {
+  cachedData.courses = data;
   const container = document.querySelector('#panel-courses .course-grid');
   if (!data.items || data.items.length === 0 || !container) return;
   
@@ -2480,12 +2679,13 @@ function renderCourses(data) {
   
   container.innerHTML = data.items.map(item => {
     const badge = badgeLabels[item.badge] || { cn: item.badge, cls: 'flagship' };
+    const paidTag = item.isPaid ? `<span style="margin-left:8px;font-size:0.7rem;padding:2px 8px;border-radius:100px;background:rgba(200,162,101,0.15);color:var(--gold)">💰 ${item.price || (currentLang === 'cn' ? '付费' : 'Paid')}</span>` : '';
     return `
-      <div class="course-card">
-        <span class="c-badge ${badge.cls}" data-cn="${badge.cn}" data-en="${item.badge}">${currentLang === 'cn' ? badge.cn : item.badge}</span>
-        <h3 data-cn="${esc(item.title)}" data-en="${esc(item.titleEN)}">${currentLang === 'cn' ? esc(item.title) : esc(item.titleEN)}</h3>
-        <div class="c-audience" data-cn="适合：${esc(item.audience)}" data-en="For: ${esc(item.audienceEN)}">${currentLang === 'cn' ? '适合：' + esc(item.audience) : 'For: ' + esc(item.audienceEN)}</div>
-        <p class="c-desc" data-cn="${esc(item.description)}" data-en="${esc(item.descriptionEN)}">${currentLang === 'cn' ? esc(item.description) : esc(item.descriptionEN)}</p>
+      <div class="course-card" data-id="${item.id}" onclick="openCourse('${item.id}')">
+        <span class="c-badge ${badge.cls}">${currentLang === 'cn' ? badge.cn : item.badge}</span>${paidTag}
+        <h3>${currentLang === 'cn' ? esc(item.title) : esc(item.titleEN)}</h3>
+        <div class="c-audience">${currentLang === 'cn' ? '适合：' + esc(item.audience) : 'For: ' + esc(item.audienceEN)}</div>
+        <p class="c-desc">${currentLang === 'cn' ? esc(item.description) : esc(item.descriptionEN)}</p>
         <ul class="c-modules">
           ${(currentLang === 'cn' ? item.modules : item.modulesEN).map(m => `<li>${esc(m)}</li>`).join('')}
         </ul>
@@ -2495,14 +2695,16 @@ function renderCourses(data) {
 
 // ── Render: Consulting from Notion ──
 function renderConsulting(data) {
+  cachedData.consulting = data;
   const container = document.querySelector('#panel-consulting .consult-grid');
   if (!data.items || data.items.length === 0 || !container) return;
   
   container.innerHTML = data.items.map(item => `
-    <div class="consult-card">
-      <h3 data-cn="${esc(item.icon)} ${esc(item.title)}" data-en="${esc(item.icon)} ${esc(item.titleEN)}">${item.icon} ${currentLang === 'cn' ? esc(item.title) : esc(item.titleEN)}</h3>
-      <div class="t-audience" data-cn="适合：${esc(item.audience)}" data-en="For: ${esc(item.audienceEN)}">${currentLang === 'cn' ? '适合：' + esc(item.audience) : 'For: ' + esc(item.audienceEN)}</div>
-      <p class="co-desc" data-cn="${esc(item.description)}" data-en="${esc(item.descriptionEN)}">${currentLang === 'cn' ? esc(item.description) : esc(item.descriptionEN)}</p>
+    <div class="consult-card" data-id="${item.id}" onclick="openConsulting('${item.id}')">
+      <h3>${item.icon} ${currentLang === 'cn' ? esc(item.title) : esc(item.titleEN)}</h3>
+      <div class="t-audience">${currentLang === 'cn' ? '适合：' + esc(item.audience) : 'For: ' + esc(item.audienceEN)}</div>
+      <p class="co-desc">${currentLang === 'cn' ? esc(item.description) : esc(item.descriptionEN)}</p>
+      <span class="btn btn-ghost" style="font-size:0.82rem;padding:8px 0">${currentLang === 'cn' ? '了解详情 →' : 'Learn More →'}</span>
     </div>
   `).join('');
 }
@@ -2556,6 +2758,192 @@ async function initNotion() {
 
 // Start loading when page is ready
 document.addEventListener('DOMContentLoaded', initNotion);
+
+// ═══════════════════════════════════════════
+// MODAL SYSTEM
+// ═══════════════════════════════════════════
+
+let cachedData = { insights: null, courses: null, templates: null, consulting: null };
+
+function openModal() {
+  document.getElementById('detailModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('detailModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// Close on overlay click
+document.getElementById('detailModal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+// Close on Escape key
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeModal();
+});
+
+// ── Open article detail ──
+async function openInsight(id) {
+  const header = document.getElementById('modalHeader');
+  const body = document.getElementById('modalBody');
+  
+  // Find item data
+  const item = cachedData.insights?.items?.find(i => i.id === id);
+  const isCN = currentLang === 'cn';
+  
+  header.innerHTML = `
+    <div class="m-badge">${item?.category || ''}</div>
+    <h2>${isCN ? esc(item?.title) : esc(item?.titleEN)}</h2>
+    <div class="m-meta">${item?.date || ''}</div>
+  `;
+  
+  body.innerHTML = '<div class="modal-loading"><div class="spinner"></div>' + (isCN ? '正在加载文章内容...' : 'Loading article...') + '</div>';
+  openModal();
+  
+  try {
+    const res = await fetch(`${NOTION_CONFIG.workerUrl}/api/page/${id}`);
+    const data = await res.json();
+    if (data.html && data.html.trim()) {
+      body.innerHTML = data.html;
+    } else {
+      body.innerHTML = `<p>${isCN ? esc(item?.summary) : esc(item?.summaryEN)}</p>
+        <p style="color:var(--text-muted);font-style:italic">${isCN ? '完整内容正在整理中...' : 'Full content coming soon...'}</p>`;
+    }
+  } catch (err) {
+    body.innerHTML = `<p>${isCN ? esc(item?.summary) : esc(item?.summaryEN)}</p>`;
+  }
+}
+
+// ── Open course detail ──
+async function openCourse(id) {
+  const header = document.getElementById('modalHeader');
+  const body = document.getElementById('modalBody');
+  const item = cachedData.courses?.items?.find(i => i.id === id);
+  const isCN = currentLang === 'cn';
+  
+  const badgeLabels = { 'Flagship': '主力课程', 'Advanced': '进阶课程', 'Lead Gen': '引流课程' };
+  
+  header.innerHTML = `
+    <div class="m-badge">${isCN ? (badgeLabels[item?.badge] || item?.badge) : item?.badge}</div>
+    <h2>${isCN ? esc(item?.title) : esc(item?.titleEN)}</h2>
+    <div class="m-meta">${isCN ? '适合：' : 'For: '}${isCN ? esc(item?.audience) : esc(item?.audienceEN)}</div>
+  `;
+  
+  const modules = isCN ? item?.modules : item?.modulesEN;
+  let content = `<p>${isCN ? esc(item?.description) : esc(item?.descriptionEN)}</p>`;
+  
+  if (modules?.length) {
+    content += `<h3>${isCN ? '课程模块' : 'Course Modules'}</h3><ul>`;
+    modules.forEach(m => { content += `<li>${esc(m)}</li>`; });
+    content += '</ul>';
+  }
+  
+  // Load full page content
+  body.innerHTML = content + '<div class="modal-loading"><div class="spinner"></div>' + (isCN ? '加载详情...' : 'Loading details...') + '</div>';
+  openModal();
+  
+  try {
+    const res = await fetch(`${NOTION_CONFIG.workerUrl}/api/page/${id}`);
+    const data = await res.json();
+    if (data.html?.trim()) {
+      body.innerHTML = content + '<hr>' + data.html;
+    } else {
+      body.innerHTML = content;
+    }
+  } catch (err) {
+    body.innerHTML = content;
+  }
+  
+  // Add payment gate if paid
+  if (item?.isPaid && item?.price) {
+    body.innerHTML += `
+      <div class="paywall">
+        <div class="lock-icon">🔒</div>
+        <h3>${isCN ? '付费课程' : 'Premium Course'}</h3>
+        <div class="price-tag">${esc(item.price)}</div>
+        <p>${isCN ? '解锁完整课程内容，包含所有模块、模板和持续更新。' : 'Unlock full course content including all modules, templates, and ongoing updates.'}</p>
+        <button class="pay-btn primary" onclick="alert('${isCN ? '请添加微信咨询购买' : 'Please add WeChat for purchase'}')">${isCN ? '立即购买' : 'Purchase Now'}</button>
+        <div class="pay-methods">
+          <button class="pay-btn">💚 ${isCN ? '微信' : 'WeChat'}</button>
+          <button class="pay-btn">🔵 ${isCN ? '支付宝' : 'Alipay'}</button>
+          <button class="pay-btn">🅿️ PayPal</button>
+        </div>
+      </div>`;
+  }
+}
+
+// ── Open template detail ──
+async function openTemplate(id) {
+  const header = document.getElementById('modalHeader');
+  const body = document.getElementById('modalBody');
+  const item = cachedData.templates?.items?.find(i => i.id === id);
+  const isCN = currentLang === 'cn';
+  
+  header.innerHTML = `
+    <h2>${item?.icon || ''} ${isCN ? esc(item?.title) : esc(item?.titleEN)}</h2>
+    <div class="m-meta">${isCN ? '适合：' : 'For: '}${isCN ? esc(item?.audience) : esc(item?.audienceEN)}</div>
+  `;
+  
+  const includes = isCN ? item?.includes : item?.includesEN;
+  let content = `<p>${isCN ? esc(item?.description) : esc(item?.descriptionEN)}</p>`;
+  if (includes?.length) {
+    content += `<h3>${isCN ? '包含内容' : 'Includes'}</h3><ul>`;
+    includes.forEach(inc => { content += `<li>${esc(inc)}</li>`; });
+    content += '</ul>';
+  }
+  
+  body.innerHTML = content;
+  openModal();
+  
+  // Load page content
+  try {
+    const res = await fetch(`${NOTION_CONFIG.workerUrl}/api/page/${id}`);
+    const data = await res.json();
+    if (data.html?.trim()) body.innerHTML = content + '<hr>' + data.html;
+  } catch (err) {}
+  
+  if (item?.isPaid && item?.price) {
+    body.innerHTML += `
+      <div class="paywall">
+        <div class="lock-icon">🔒</div>
+        <h3>${isCN ? '付费模板' : 'Premium Template'}</h3>
+        <div class="price-tag">${esc(item.price)}</div>
+        <p>${isCN ? '购买后立即获取完整模板包。' : 'Get the full template pack immediately after purchase.'}</p>
+        <button class="pay-btn primary" onclick="alert('${isCN ? '请添加微信咨询购买' : 'Please add WeChat for purchase'}')">${isCN ? '立即购买' : 'Purchase Now'}</button>
+      </div>`;
+  }
+}
+
+// ── Open consulting detail ──
+async function openConsulting(id) {
+  const header = document.getElementById('modalHeader');
+  const body = document.getElementById('modalBody');
+  const item = cachedData.consulting?.items?.find(i => i.id === id);
+  const isCN = currentLang === 'cn';
+  
+  header.innerHTML = `
+    <h2>${item?.icon || ''} ${isCN ? esc(item?.title) : esc(item?.titleEN)}</h2>
+    <div class="m-meta">${isCN ? '适合：' : 'For: '}${isCN ? esc(item?.audience) : esc(item?.audienceEN)}</div>
+  `;
+  
+  let content = `<p>${isCN ? esc(item?.description) : esc(item?.descriptionEN)}</p>`;
+  body.innerHTML = content;
+  openModal();
+  
+  try {
+    const res = await fetch(`${NOTION_CONFIG.workerUrl}/api/page/${id}`);
+    const data = await res.json();
+    if (data.html?.trim()) body.innerHTML = content + '<hr>' + data.html;
+  } catch (err) {}
+  
+  body.innerHTML += `
+    <div style="text-align:center;padding-top:24px;border-top:1px solid var(--border);margin-top:24px">
+      <a href="#contact" class="btn btn-primary" onclick="closeModal()" style="text-decoration:none">${isCN ? '预约咨询 →' : 'Book Consultation →'}</a>
+    </div>`;
+}
 </script>
 
 </body>
