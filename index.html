@@ -1155,6 +1155,64 @@ footer {
 }
 
 /* ═══════════════════════════════════════════
+   LOADING SKELETONS (Notion integration)
+   ═══════════════════════════════════════════ */
+.skeleton {
+  background: linear-gradient(90deg, var(--bg-card) 25%, var(--bg-card-hover) 50%, var(--bg-card) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease infinite;
+  border-radius: 8px;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.skeleton-card {
+  padding: 28px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--bg-card);
+}
+
+.skeleton-line {
+  height: 14px;
+  margin-bottom: 10px;
+  border-radius: 4px;
+}
+
+.skeleton-line.w60 { width: 60%; }
+.skeleton-line.w80 { width: 80%; }
+.skeleton-line.w40 { width: 40%; }
+.skeleton-line.w100 { width: 100%; }
+.skeleton-line.title { height: 20px; width: 70%; margin-bottom: 14px; }
+
+.notion-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  margin-top: 8px;
+  opacity: 0.6;
+}
+
+.notion-status .dot-live {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #4ADE80;
+}
+
+.notion-status .dot-static {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--text-muted);
+}
+
+/* ═══════════════════════════════════════════
    ANIMATIONS
    ═══════════════════════════════════════════ */
 .fade-in {
@@ -1838,7 +1896,12 @@ footer {
       <span class="cat-pill" data-cn="英语学习" data-en="English Learning">English Learning</span>
     </div>
     
-    <div class="insights-grid stagger fade-in">
+    <div class="insights-grid stagger fade-in" id="insights-grid" style="display:none">
+      <!-- Dynamic content from Notion (falls back to static below) -->
+    </div>
+    
+    <!-- Static fallback (shown until Notion loads, or if Notion is not configured) -->
+    <div class="insights-grid stagger fade-in" id="insights-static">
       <div class="insight-card">
         <div class="i-cat" data-cn="亚马逊运营" data-en="Amazon Operations">Amazon Operations</div>
         <h3 data-cn="多站点运营的「减法哲学」：先做好一个站点" data-en="The 'Subtraction Philosophy' of Multi-Market Ops">The 'Subtraction Philosophy' of Multi-Market Ops</h3>
@@ -2206,7 +2269,22 @@ footer {
      JAVASCRIPT
      ═══════════════════════════════════════════ -->
 <script>
-// Language state
+// ═══════════════════════════════════════════
+// NOTION CMS CONFIGURATION
+// ═══════════════════════════════════════════
+// 
+// 🔧 配置说明：
+// 把下面的 workerUrl 改成你部署的 Cloudflare Worker 地址
+// 如果不配置，网站会使用内嵌的静态内容正常显示
+//
+const NOTION_CONFIG = {
+  workerUrl: 'https://neo-notion-api.dw739347960.workers.dev',
+  enabled: true,
+};
+
+// ═══════════════════════════════════════════
+// LANGUAGE STATE
+// ═══════════════════════════════════════════
 let currentLang = 'en';
 
 function toggleLang() {
@@ -2225,16 +2303,30 @@ function toggleLang() {
   });
 }
 
-// Theme state
+// ═══════════════════════════════════════════
+// THEME STATE
+// ═══════════════════════════════════════════
 function toggleTheme() {
   const html = document.documentElement;
   const current = html.getAttribute('data-theme');
   const next = current === 'dark' ? 'light' : 'dark';
   html.setAttribute('data-theme', next);
   document.getElementById('themeToggle').textContent = next === 'dark' ? '☀' : '☾';
+  localStorage.setItem('neo-theme', next);
 }
 
-// Tab switching
+// Restore saved theme
+(function() {
+  const saved = localStorage.getItem('neo-theme');
+  if (saved) {
+    document.documentElement.setAttribute('data-theme', saved);
+    document.getElementById('themeToggle').textContent = saved === 'dark' ? '☀' : '☾';
+  }
+})();
+
+// ═══════════════════════════════════════════
+// TAB SWITCHING
+// ═══════════════════════════════════════════
 function switchTab(tabName) {
   document.querySelectorAll('.cs-tab').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.cs-panel').forEach(p => p.classList.remove('active'));
@@ -2243,7 +2335,9 @@ function switchTab(tabName) {
   document.getElementById(`panel-${tabName}`).classList.add('active');
 }
 
-// Mobile menu
+// ═══════════════════════════════════════════
+// MOBILE MENU
+// ═══════════════════════════════════════════
 function toggleMobileMenu() {
   document.getElementById('mobileNav').classList.toggle('open');
 }
@@ -2256,7 +2350,9 @@ function scrollToTop() {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// Scroll animations
+// ═══════════════════════════════════════════
+// SCROLL ANIMATIONS
+// ═══════════════════════════════════════════
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
@@ -2285,6 +2381,181 @@ window.addEventListener('scroll', () => {
     }
   });
 });
+
+// ═══════════════════════════════════════════
+// NOTION CMS INTEGRATION
+// ═══════════════════════════════════════════
+
+// Category filter for insights
+document.querySelectorAll('.cat-pill').forEach(pill => {
+  pill.addEventListener('click', function() {
+    document.querySelectorAll('.cat-pill').forEach(p => p.classList.remove('active'));
+    this.classList.add('active');
+    
+    const category = this.getAttribute('data-en') || this.textContent;
+    filterInsights(category);
+  });
+});
+
+function filterInsights(category) {
+  const grid = document.getElementById('insights-grid').children.length > 0
+    ? document.getElementById('insights-grid')
+    : document.getElementById('insights-static');
+  
+  Array.from(grid.children).forEach(card => {
+    if (category === 'All') {
+      card.style.display = '';
+    } else {
+      const cardCat = card.querySelector('.i-cat');
+      if (cardCat) {
+        const catText = cardCat.getAttribute('data-en') || cardCat.textContent;
+        card.style.display = catText.includes(category) ? '' : 'none';
+      }
+    }
+  });
+}
+
+// ── Helper: generate skeleton loading cards ──
+function skeletonCards(count, container) {
+  let html = '';
+  for (let i = 0; i < count; i++) {
+    html += `
+      <div class="skeleton-card">
+        <div class="skeleton skeleton-line w40"></div>
+        <div class="skeleton skeleton-line title"></div>
+        <div class="skeleton skeleton-line w100"></div>
+        <div class="skeleton skeleton-line w80"></div>
+        <div class="skeleton skeleton-line w60"></div>
+      </div>`;
+  }
+  container.innerHTML = html;
+}
+
+// ── Render: Insights from Notion ──
+function renderInsights(data) {
+  const grid = document.getElementById('insights-grid');
+  if (!data.items || data.items.length === 0) return; // Keep static fallback
+  
+  // Hide static fallback
+  const staticGrid = document.getElementById('insights-static');
+  if (staticGrid) staticGrid.style.display = 'none';
+  
+  grid.innerHTML = data.items.map(item => `
+    <div class="insight-card">
+      <div class="i-cat" data-cn="${item.category}" data-en="${item.category}">${currentLang === 'cn' ? item.category : item.category}</div>
+      <h3 data-cn="${esc(item.title)}" data-en="${esc(item.titleEN)}">${currentLang === 'cn' ? esc(item.title) : esc(item.titleEN)}</h3>
+      <p data-cn="${esc(item.summary)}" data-en="${esc(item.summaryEN)}">${currentLang === 'cn' ? esc(item.summary) : esc(item.summaryEN)}</p>
+      <div class="i-date">${item.date || ''}</div>
+      ${item.link ? `<a href="${esc(item.link)}" target="_blank" class="btn btn-ghost" style="margin-top:8px; padding:8px 0; font-size:0.82rem" data-cn="阅读全文 →" data-en="Read More →">${currentLang === 'cn' ? '阅读全文 →' : 'Read More →'}</a>` : ''}
+    </div>
+  `).join('');
+  
+  grid.style.display = '';
+}
+
+// ── Render: Templates from Notion ──
+function renderTemplates(data) {
+  const container = document.querySelector('#panel-templates .template-grid');
+  if (!data.items || data.items.length === 0 || !container) return;
+  
+  container.innerHTML = data.items.map(item => `
+    <div class="template-card">
+      <h3 data-cn="${esc(item.icon)} ${esc(item.title)}" data-en="${esc(item.icon)} ${esc(item.titleEN)}">${item.icon} ${currentLang === 'cn' ? esc(item.title) : esc(item.titleEN)}</h3>
+      <div class="t-audience" data-cn="适合：${esc(item.audience)}" data-en="For: ${esc(item.audienceEN)}">${currentLang === 'cn' ? '适合：' + esc(item.audience) : 'For: ' + esc(item.audienceEN)}</div>
+      <div class="t-desc" data-cn="${esc(item.description)}" data-en="${esc(item.descriptionEN)}">${currentLang === 'cn' ? esc(item.description) : esc(item.descriptionEN)}</div>
+      <ul class="t-includes">
+        ${(currentLang === 'cn' ? item.includes : item.includesEN).map(inc => `<li>${esc(inc)}</li>`).join('')}
+      </ul>
+      <a href="#" class="btn btn-outline btn-sm" data-cn="了解详情" data-en="Learn More">${currentLang === 'cn' ? '了解详情' : 'Learn More'}</a>
+    </div>
+  `).join('');
+}
+
+// ── Render: Courses from Notion ──
+function renderCourses(data) {
+  const container = document.querySelector('#panel-courses .course-grid');
+  if (!data.items || data.items.length === 0 || !container) return;
+  
+  const badgeLabels = { 'Flagship': { cn: '主力课程', cls: 'flagship' }, 'Advanced': { cn: '进阶课程', cls: 'advanced' }, 'Lead Gen': { cn: '引流课程', cls: 'lead-gen' } };
+  
+  container.innerHTML = data.items.map(item => {
+    const badge = badgeLabels[item.badge] || { cn: item.badge, cls: 'flagship' };
+    return `
+      <div class="course-card">
+        <span class="c-badge ${badge.cls}" data-cn="${badge.cn}" data-en="${item.badge}">${currentLang === 'cn' ? badge.cn : item.badge}</span>
+        <h3 data-cn="${esc(item.title)}" data-en="${esc(item.titleEN)}">${currentLang === 'cn' ? esc(item.title) : esc(item.titleEN)}</h3>
+        <div class="c-audience" data-cn="适合：${esc(item.audience)}" data-en="For: ${esc(item.audienceEN)}">${currentLang === 'cn' ? '适合：' + esc(item.audience) : 'For: ' + esc(item.audienceEN)}</div>
+        <p class="c-desc" data-cn="${esc(item.description)}" data-en="${esc(item.descriptionEN)}">${currentLang === 'cn' ? esc(item.description) : esc(item.descriptionEN)}</p>
+        <ul class="c-modules">
+          ${(currentLang === 'cn' ? item.modules : item.modulesEN).map(m => `<li>${esc(m)}</li>`).join('')}
+        </ul>
+      </div>`;
+  }).join('');
+}
+
+// ── Render: Consulting from Notion ──
+function renderConsulting(data) {
+  const container = document.querySelector('#panel-consulting .consult-grid');
+  if (!data.items || data.items.length === 0 || !container) return;
+  
+  container.innerHTML = data.items.map(item => `
+    <div class="consult-card">
+      <h3 data-cn="${esc(item.icon)} ${esc(item.title)}" data-en="${esc(item.icon)} ${esc(item.titleEN)}">${item.icon} ${currentLang === 'cn' ? esc(item.title) : esc(item.titleEN)}</h3>
+      <div class="t-audience" data-cn="适合：${esc(item.audience)}" data-en="For: ${esc(item.audienceEN)}">${currentLang === 'cn' ? '适合：' + esc(item.audience) : 'For: ' + esc(item.audienceEN)}</div>
+      <p class="co-desc" data-cn="${esc(item.description)}" data-en="${esc(item.descriptionEN)}">${currentLang === 'cn' ? esc(item.description) : esc(item.descriptionEN)}</p>
+    </div>
+  `).join('');
+}
+
+// ── HTML escape helper ──
+function esc(str) {
+  if (!str) return '';
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+// ── Fetch from Notion via Worker ──
+async function fetchNotion(endpoint) {
+  try {
+    const res = await fetch(`${NOTION_CONFIG.workerUrl}/api/${endpoint}`, {
+      headers: { 'Accept': 'application/json' },
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return await res.json();
+  } catch (err) {
+    console.warn(`[Notion] Failed to load ${endpoint}:`, err.message);
+    return null;
+  }
+}
+
+// ── Initialize Notion content loading ──
+async function initNotion() {
+  if (!NOTION_CONFIG.enabled || !NOTION_CONFIG.workerUrl) {
+    console.log('[Notion] CMS not configured — using static content');
+    return;
+  }
+  
+  console.log('[Notion] Loading content from CMS...');
+  
+  // Load all content in parallel
+  const [insights, templates, courses, consulting] = await Promise.all([
+    fetchNotion('insights'),
+    fetchNotion('templates'),
+    fetchNotion('courses'),
+    fetchNotion('consulting'),
+  ]);
+  
+  if (insights) renderInsights(insights);
+  if (templates) renderTemplates(templates);
+  if (courses) renderCourses(courses);
+  if (consulting) renderConsulting(consulting);
+  
+  console.log('[Notion] Content loaded successfully');
+}
+
+// Start loading when page is ready
+document.addEventListener('DOMContentLoaded', initNotion);
 </script>
 
 </body>
